@@ -12,8 +12,10 @@ class ProductModel {
   late String countryofOrigin;
   late String nameOfImporter;
   late String addressofImporter;
+  late String id;
 
   ProductModel({
+    required this.id,
     required this.images,
     required this.name,
     required this.mrp,
@@ -31,6 +33,7 @@ class ProductModel {
 
   Map<String, dynamic> toMap() {
     return {
+      'id': id,
       'images': images,
       'name': name,
       'mrp': mrp,
@@ -61,5 +64,6 @@ class ProductModel {
     countryofOrigin = map['countryofOrigin'];
     nameOfImporter = map['nameOfImporter'];
     addressofImporter = map['addressofImporter'];
+    id = map['id'];
   }
 }

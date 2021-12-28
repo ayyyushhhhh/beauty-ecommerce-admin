@@ -92,20 +92,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.2.0"
-  ffi:
-    dependency: transitive
-    description:
-      name: ffi
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "1.1.2"
-  file_picker:
-    dependency: "direct main"
-    description:
-      name: file_picker
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "4.3.0"
   firebase_core:
     dependency: "direct main"
     description:
@@ -205,13 +191,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.4.1"
-  image_picker_web:
-    dependency: "direct main"
-    description:
-      name: image_picker_web
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "2.1.0"
   js:
     dependency: transitive
     description:
@@ -247,6 +226,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.0.2"
+  responsive_framework:
+    dependency: "direct main"
+    description:
+      name: responsive_framework
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.1.5"
   sky_engine:
     dependency: transitive
     description: flutter

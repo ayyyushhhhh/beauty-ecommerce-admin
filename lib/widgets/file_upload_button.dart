@@ -1,15 +1,17 @@
-import 'dart:io';
 import 'dart:typed_data';
-import 'dart:ui' as ui;
+
 import 'package:beauty_app/services/firebase/cloud_storage.dart';
-import 'package:firebase_storage/firebase_storage.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:image_picker_web/image_picker_web.dart';
-import 'dart:async';
+
+import 'exception_alert_dialog.dart';
 
 class FileUploadArea extends StatefulWidget {
-  FileUploadArea({Key? key}) : super(key: key);
+  final Function(String) onCountChanged;
+
+  FileUploadArea({Key? key, required this.onCountChanged}) : super(key: key);
 
   @override
   _FileUploadAreaState createState() => _FileUploadAreaState();
@@ -17,26 +19,35 @@ class FileUploadArea extends StatefulWidget {
 
 class _FileUploadAreaState extends State<FileUploadArea> {
   List<String> _filesPath = [];
-
+  bool _isLoading = false;
   _uploadImage() async {
     final picker = ImagePicker();
     final image = await picker.pickImage(source: ImageSource.gallery);
     if (image == null) return;
+    setState(() {
+      _isLoading = true;
+    });
     final Uint8List bytes = await image.readAsBytes();
-
-    final fileUrl = await CloudStorage()
-        .uploadFile(imageBytes: bytes, filePath: 'files/${DateTime.now()}.png');
-    if (fileUrl != null)
-      setState(() {
-        _filesPath.add(fileUrl);
-      });
+    try {
+      final fileUrl = await CloudStorage()
+          .uploadFile(imageBytes: bytes, filePath: 'files/${image.name}.png');
+      if (fileUrl != null)
+        setState(() {
+          _filesPath.add(fileUrl);
+          widget.onCountChanged(fileUrl);
+          _isLoading = false;
+        });
+    } on FirebaseException catch (e) {
+      showExceptionAlertDialog(context,
+          title: "File Upload Error", exception: e);
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Container(
-        height: 300,
         margin: EdgeInsets.only(bottom: 10),
+        padding: EdgeInsets.all(10),
         width: double.infinity,
         decoration: BoxDecoration(
           color: Colors.white,
@@ -50,24 +61,57 @@ class _FileUploadAreaState extends State<FileUploadArea> {
             ),
           ],
         ),
-        child: InkWell(
-          onTap: _uploadImage,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Icon(
-                Icons.cloud_upload,
-                size: 50,
-                color: Colors.grey,
-              ),
-              Center(
-                child: Text(
-                  "Upload Image",
-                  style: TextStyle(fontSize: 30),
+        child: Column(
+          children: [
+            Container(
+              child: InkWell(
+                onTap: _uploadImage,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(
+                      Icons.cloud_upload,
+                      size: 50,
+                      color: Colors.grey,
+                    ),
+                    Center(
+                      child: Text(
+                        "Upload Image",
+                        style: TextStyle(fontSize: 30),
+                      ),
+                    ),
+                    if (_isLoading)
+                      Container(
+                        margin: EdgeInsets.only(top: 10),
+                        child: CircularProgressIndicator(),
+                      ),
+                  ],
                 ),
               ),
-            ],
-          ),
+            ),
+            Divider(
+              thickness: 1,
+              color: Colors.grey,
+            ),
+            SizedBox(
+              height: 5,
+            ),
+            GridView.builder(
+              shrinkWrap: true,
+              //itemCount: images.length,
+              itemCount: _filesPath.length,
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 5, mainAxisSpacing: 10, crossAxisSpacing: 10),
+              itemBuilder: (BuildContext context, int index) {
+                return Container(
+                  child: Image.network(
+                    _filesPath[index],
+                    fit: BoxFit.cover,
+                  ),
+                );
+              },
+            ),
+          ],
         ));
   }
 }

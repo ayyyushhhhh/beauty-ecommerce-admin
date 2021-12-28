@@ -8,13 +8,14 @@ class CloudDatabase {
   }
 
   Future<void> uploadProductData(Map<String, dynamic> product) async {
-    final String productpath = "Data/Products/Product Data/${product["name"]}";
+    final String productpath =
+        "Data/Products/${product["id"]}/${product["name"]}";
 
     try {
       final DocumentReference<Map<String, dynamic>> cloudRef =
           _firestore.doc(productpath);
       await cloudRef.set(product);
-    } catch (e) {
+    } on FirebaseException {
       rethrow;
     }
   }

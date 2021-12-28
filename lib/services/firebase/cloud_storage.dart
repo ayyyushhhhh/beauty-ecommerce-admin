@@ -1,4 +1,3 @@
-import 'dart:io';
 import 'dart:typed_data';
 import 'package:firebase_storage/firebase_storage.dart';
 
@@ -12,7 +11,7 @@ class CloudStorage {
       final String url = await storageReference.getDownloadURL();
       return url;
     } on FirebaseException {
-      return null;
+      rethrow;
     }
   }
 }

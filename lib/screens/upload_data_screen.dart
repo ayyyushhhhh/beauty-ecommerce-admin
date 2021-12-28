@@ -1,6 +1,11 @@
+import 'dart:math';
+
 import 'package:beauty_app/models/product_model.dart';
 import 'package:beauty_app/services/firebase/cloud_database.dart';
+import 'package:beauty_app/widgets/error_widget.dart';
+import 'package:beauty_app/widgets/exception_alert_dialog.dart';
 import 'package:beauty_app/widgets/file_upload_button.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 enum _textFieldType {
@@ -37,6 +42,13 @@ class _UploadDataScreenState extends State<UploadDataScreen> {
   late String _countryofOrigin = "";
   late String _nameOfImporter = "";
   late String _addressofImporter = "";
+  late String id;
+
+  @override
+  void initState() {
+    super.initState();
+    id = Random.secure().nextInt(1000000).toString();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -50,7 +62,11 @@ class _UploadDataScreenState extends State<UploadDataScreen> {
           padding: EdgeInsets.all(20),
           child: Column(
             children: [
-              FileUploadArea(),
+              FileUploadArea(
+                onCountChanged: (String imageurl) {
+                  _images.add(imageurl);
+                },
+              ),
               Align(
                 alignment: Alignment.centerLeft,
                 child: Text(
@@ -80,76 +96,7 @@ class _UploadDataScreenState extends State<UploadDataScreen> {
                   inputTextFieldType: _textFieldType.ProductDescription,
                   height: 200),
               SizedBox(height: 10),
-              Row(
-                children: [
-                  Text(
-                    "MRP : ₹",
-                    style: TextStyle(
-                      fontSize: 24,
-                      fontWeight: FontWeight.w800,
-                    ),
-                  ),
-                  SizedBox(width: 10),
-                  SizedBox(
-                      width: 100,
-                      child: _buildTextField(
-                          height: 40, inputTextFieldType: _textFieldType.MRP)),
-                  SizedBox(width: 10),
-                  Text(
-                    "Quantity : ",
-                    style: TextStyle(
-                      fontSize: 24,
-                      fontWeight: FontWeight.w800,
-                    ),
-                  ),
-                  SizedBox(width: 10),
-                  SizedBox(
-                      width: 100,
-                      child: _buildTextField(
-                          height: 40,
-                          inputTextFieldType: _textFieldType.Quantity)),
-                  SizedBox(width: 10),
-                  Row(
-                    children: [
-                      Text(
-                        'In Stocks?',
-                        style: TextStyle(fontSize: 24),
-                      ), //Text
-                      SizedBox(width: 10), //SizedBox
-                      /** Checkbox Widget **/
-                      Checkbox(
-                        value: _inStocks,
-                        onChanged: (value) {
-                          setState(() {
-                            _inStocks = value!;
-                          });
-                        },
-                      ), //Checkbox
-                    ],
-                  ),
-                  Row(
-                    children: [
-                      SizedBox(
-                        width: 10,
-                      ),
-                      Text(
-                        'Cruelty Free ? ',
-                        style: TextStyle(fontSize: 24),
-                      ), //Text
-                      SizedBox(width: 10), //SizedBox
-                      /** Checkbox Widget **/
-                      Checkbox(
-                        value: _crueltyFree,
-                        onChanged: (value) {
-                          setState(() {
-                            _crueltyFree = value!;
-                          });
-                        },
-                      ),
-                    ],
-                  ),
-                ],
-              ),
+              _buildAdditionalDetails(),
               SizedBox(
                 height: 10,
               ),
@@ -242,22 +189,24 @@ class _UploadDataScreenState extends State<UploadDataScreen> {
               SizedBox(height: 10),
               ElevatedButton(
                 onPressed: () {
-                  final ProductModel productModel = ProductModel(
-                      images: [],
-                      name: _name,
-                      mrp: _mrp,
-                      quantity: _quantity,
-                      productDescription: _productDescription,
-                      features: _features,
-                      benefits: _benefits,
-                      ingredients: _ingredients,
-                      inStocks: _inStocks,
-                      crueltyFree: _crueltyFree,
-                      countryofOrigin: _countryofOrigin,
-                      nameOfImporter: _nameOfImporter,
-                      addressofImporter: _addressofImporter);
-                  final CloudDatabase cloudDatabase = CloudDatabase();
-                  cloudDatabase.uploadProductData(productModel.toMap());
+                  if (_addressofImporter != "" &&
+                      _images.length != 0 &&
+                      _ingredients != "" &&
+                      _benefits != "" &&
+                      _countryofOrigin != "" &&
+                      _features != "" &&
+                      _nameOfImporter != "" &&
+                      _name != "" &&
+                      _productDescription != "" &&
+                      _quantity != "" &&
+                      _mrp != "") {
+                    _uploadProduct();
+                  } else {
+                    showAlertDialog(context,
+                        title: "Error",
+                        content: "Please fill all the fields",
+                        defaultActionText: "OK");
+                  }
                 },
                 child: Container(
                   height: 70,
@@ -284,6 +233,31 @@ class _UploadDataScreenState extends State<UploadDataScreen> {
         ),
       ),
     );
+  }
+
+  void _uploadProduct() {
+    final ProductModel productModel = ProductModel(
+        id: id,
+        images: _images,
+        name: _name,
+        mrp: _mrp,
+        quantity: _quantity,
+        productDescription: _productDescription,
+        features: _features,
+        benefits: _benefits,
+        ingredients: _ingredients,
+        inStocks: _inStocks,
+        crueltyFree: _crueltyFree,
+        countryofOrigin: _countryofOrigin,
+        nameOfImporter: _nameOfImporter,
+        addressofImporter: _addressofImporter);
+    final CloudDatabase cloudDatabase = CloudDatabase();
+    try {
+      cloudDatabase.uploadProductData(productModel.toMap());
+    } on FirebaseException catch (e) {
+      showExceptionAlertDialog(context,
+          title: "Some Error Occured!", exception: e);
+    }
   }
 
   Widget _buildTextField({
@@ -338,6 +312,176 @@ class _UploadDataScreenState extends State<UploadDataScreen> {
           ),
         ),
       ),
+    );
+  }
+
+  Widget _buildAdditionalDetails() {
+    return LayoutBuilder(
+      builder: (BuildContext context, BoxConstraints constraints) {
+        if (constraints.maxWidth > 800) {
+          return Row(
+            children: [
+              Row(
+                children: [
+                  Text(
+                    "MRP : ₹",
+                    style: TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.w800,
+                    ),
+                  ),
+                  SizedBox(width: 10),
+                  SizedBox(
+                      width: 100,
+                      child: _buildTextField(
+                          height: 40, inputTextFieldType: _textFieldType.MRP)),
+                  SizedBox(width: 10),
+                ],
+              ),
+              Row(
+                children: [
+                  Text(
+                    "Quantity : ",
+                    style: TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.w800,
+                    ),
+                  ),
+                  SizedBox(width: 10),
+                  SizedBox(
+                      width: 100,
+                      child: _buildTextField(
+                          height: 40,
+                          inputTextFieldType: _textFieldType.Quantity)),
+                ],
+              ),
+              SizedBox(width: 10),
+              Row(
+                children: [
+                  Text(
+                    'In Stocks?',
+                    style: TextStyle(fontSize: 24),
+                  ), //Text
+                  SizedBox(width: 10), //SizedBox
+                  /** Checkbox Widget **/
+                  Checkbox(
+                    value: _inStocks,
+                    onChanged: (value) {
+                      setState(() {
+                        _inStocks = value!;
+                      });
+                    },
+                  ), //Checkbox
+                ],
+              ),
+              Row(
+                children: [
+                  SizedBox(
+                    width: 10,
+                  ),
+                  Text(
+                    'Cruelty Free ? ',
+                    style: TextStyle(fontSize: 24),
+                  ), //Text
+                  SizedBox(width: 10), //SizedBox
+                  /** Checkbox Widget **/
+                  Checkbox(
+                    value: _crueltyFree,
+                    onChanged: (value) {
+                      setState(() {
+                        _crueltyFree = value!;
+                      });
+                    },
+                  ),
+                ],
+              ),
+            ],
+          );
+        } else {
+          return Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Row(
+                children: [
+                  Text(
+                    "MRP : ₹",
+                    style: TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.w800,
+                    ),
+                  ),
+                  SizedBox(width: 10),
+                  SizedBox(
+                      width: 100,
+                      child: _buildTextField(
+                          height: 40, inputTextFieldType: _textFieldType.MRP)),
+                  SizedBox(width: 10),
+                ],
+              ),
+              SizedBox(
+                height: 10,
+              ),
+              Row(
+                children: [
+                  Text(
+                    "Quantity : ",
+                    style: TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.w800,
+                    ),
+                  ),
+                  SizedBox(width: 10),
+                  SizedBox(
+                      width: 100,
+                      child: _buildTextField(
+                          height: 40,
+                          inputTextFieldType: _textFieldType.Quantity)),
+                ],
+              ),
+              SizedBox(
+                height: 10,
+              ),
+              Row(
+                children: [
+                  Text(
+                    'In Stocks?',
+                    style: TextStyle(fontSize: 24),
+                  ), //Text
+                  SizedBox(width: 10), //SizedBox
+                  /** Checkbox Widget **/
+                  Checkbox(
+                    value: _inStocks,
+                    onChanged: (value) {
+                      setState(() {
+                        _inStocks = value!;
+                      });
+                    },
+                  ), //Checkbox
+                ],
+              ),
+              Row(
+                children: [
+                  Text(
+                    'Cruelty Free ? ',
+                    style: TextStyle(fontSize: 24),
+                  ), //Text
+                  SizedBox(width: 10), //SizedBox
+                  /** Checkbox Widget **/
+                  Checkbox(
+                    value: _crueltyFree,
+                    onChanged: (value) {
+                      setState(() {
+                        _crueltyFree = value!;
+                      });
+                    },
+                  ),
+                ],
+              ),
+            ],
+          );
+        }
+      },
     );
   }
 }
