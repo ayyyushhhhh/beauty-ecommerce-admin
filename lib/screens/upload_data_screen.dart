@@ -1,11 +1,11 @@
 import 'dart:math';
 
 import 'package:beauty_app/models/product_model.dart';
-import 'package:beauty_app/services/firebase/cloud_database.dart';
+import 'package:beauty_app/screens/preview_data_screen.dart';
 import 'package:beauty_app/widgets/error_widget.dart';
-import 'package:beauty_app/widgets/exception_alert_dialog.dart';
+
 import 'package:beauty_app/widgets/file_upload_button.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
+
 import 'package:flutter/material.dart';
 
 enum _textFieldType {
@@ -200,7 +200,7 @@ class _UploadDataScreenState extends State<UploadDataScreen> {
                       _productDescription != "" &&
                       _quantity != "" &&
                       _mrp != "") {
-                    _uploadProduct();
+                    _sendPreview();
                   } else {
                     showAlertDialog(context,
                         title: "Error",
@@ -217,7 +217,7 @@ class _UploadDataScreenState extends State<UploadDataScreen> {
                   child: Align(
                     alignment: Alignment.center,
                     child: Text(
-                      "SUBMIT",
+                      "PREVIEW",
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         color: Colors.white,
@@ -235,8 +235,8 @@ class _UploadDataScreenState extends State<UploadDataScreen> {
     );
   }
 
-  void _uploadProduct() {
-    final ProductModel productModel = ProductModel(
+  void _sendPreview() {
+    final ProductModel product = ProductModel(
         id: id,
         images: _images,
         name: _name,
@@ -251,13 +251,13 @@ class _UploadDataScreenState extends State<UploadDataScreen> {
         countryofOrigin: _countryofOrigin,
         nameOfImporter: _nameOfImporter,
         addressofImporter: _addressofImporter);
-    final CloudDatabase cloudDatabase = CloudDatabase();
-    try {
-      cloudDatabase.uploadProductData(productModel.toMap());
-    } on FirebaseException catch (e) {
-      showExceptionAlertDialog(context,
-          title: "Some Error Occured!", exception: e);
-    }
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (BuildContext context) {
+          return PreviewScreen(product: product);
+        },
+      ),
+    );
   }
 
   Widget _buildTextField({
