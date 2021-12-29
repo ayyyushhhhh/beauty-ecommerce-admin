@@ -27,14 +27,17 @@ class _PreviewScreenState extends State<PreviewScreen> {
           child: Column(
             children: [
               CarouselSlider(
-                options: CarouselOptions(height: 400.0),
+                options: CarouselOptions(
+                  height: 400.0,
+                  aspectRatio: 1 / 1,
+                ),
                 items: widget.product.images.map((image) {
                   return Builder(
                     builder: (BuildContext context) {
                       return Container(
                         width: MediaQuery.of(context).size.width,
                         margin: EdgeInsets.symmetric(horizontal: 5.0),
-                        decoration: BoxDecoration(color: Colors.amber),
+                        decoration: BoxDecoration(color: Colors.white),
                         child: Image.network(image),
                       );
                     },
@@ -45,27 +48,54 @@ class _PreviewScreenState extends State<PreviewScreen> {
                   title: "Product Name", value: widget.product.name),
               SizedBox(height: 10),
               _buildDataWidget(
-                  title: "Product Name", value: widget.product.mrp),
+                  title: "Price", value: "₹ " + widget.product.mrp),
               SizedBox(height: 10),
               _buildDataWidget(
-                  title: "Product Name", value: widget.product.quantity),
+                  title: "Quantity", value: widget.product.quantity),
               SizedBox(height: 10),
               _buildDataWidget(
                   title: "Product Description",
                   value: widget.product.productDescription),
               SizedBox(height: 10),
+              Container(
+                margin: EdgeInsets.all(20),
+                child: Column(
+                  children: [
+                    Row(
+                      children: [
+                        Text("Cruelty Free: "),
+                        SizedBox(width: 10),
+                        Checkbox(
+                            value: widget.product.crueltyFree,
+                            onChanged: (value) {}),
+                      ],
+                    ),
+                    SizedBox(height: 10),
+                    Row(
+                      children: [
+                        Text("In Stocks: "),
+                        SizedBox(width: 10),
+                        Checkbox(
+                            value: widget.product.inStocks,
+                            onChanged: (value) {}),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+              SizedBox(height: 10),
               _buildDataWidget(
                   title: "Benefits", value: widget.product.benefits),
               SizedBox(height: 10),
               _buildDataWidget(
-                  title: "Product Name", value: widget.product.ingredients),
+                  title: "Ingredients", value: widget.product.ingredients),
               SizedBox(height: 10),
               _buildDataWidget(
-                  title: "Product Name",
+                  title: "Importer Address",
                   value: widget.product.addressofImporter),
               SizedBox(height: 10),
               _buildDataWidget(
-                  title: "Product Name", value: widget.product.nameOfImporter),
+                  title: "Importer Name", value: widget.product.nameOfImporter),
               SizedBox(height: 10),
               ElevatedButton(
                 onPressed: _uploadProduct,

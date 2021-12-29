@@ -1,4 +1,6 @@
 import 'package:beauty_app/screens/authentication_screen.dart';
+import 'package:beauty_app/screens/products_screen.dart';
+import 'package:beauty_app/screens/upload_data_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 
@@ -26,7 +28,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.purple,
       ),
-      home: const AuthenticationScreen(),
+      home: const ProductsScreen(),
     );
   }
 }

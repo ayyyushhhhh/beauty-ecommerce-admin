@@ -1,12 +1,15 @@
+import 'dart:convert';
 import 'dart:math';
 
 import 'package:beauty_app/models/product_model.dart';
 import 'package:beauty_app/screens/preview_data_screen.dart';
+import 'package:beauty_app/services/firebase/cloud_database.dart';
 import 'package:beauty_app/widgets/error_widget.dart';
 
 import 'package:beauty_app/widgets/file_upload_button.dart';
 
 import 'package:flutter/material.dart';
+import 'package:zefyrka/zefyrka.dart';
 
 enum _textFieldType {
   Name,
@@ -22,7 +25,8 @@ enum _textFieldType {
 }
 
 class UploadDataScreen extends StatefulWidget {
-  const UploadDataScreen({Key? key}) : super(key: key);
+  final ProductModel? productModel;
+  const UploadDataScreen({Key? key, this.productModel}) : super(key: key);
 
   @override
   _UploadDataScreenState createState() => _UploadDataScreenState();
@@ -43,11 +47,14 @@ class _UploadDataScreenState extends State<UploadDataScreen> {
   late String _nameOfImporter = "";
   late String _addressofImporter = "";
   late String id;
+  ZefyrController _controller = ZefyrController();
 
   @override
   void initState() {
     super.initState();
-    id = Random.secure().nextInt(1000000).toString();
+    if (widget.productModel?.id == null) {
+      id = Random.secure().nextInt(1000000).toString();
+    }
   }
 
   @override
@@ -314,6 +321,34 @@ class _UploadDataScreenState extends State<UploadDataScreen> {
       ),
     );
   }
+
+  // Widget _buildTextField({
+  //   required double height,
+  //   required _textFieldType inputTextFieldType,
+  // }) {
+  //   return Container(
+  //       width: double.infinity,
+  //       padding: EdgeInsets.all(10),
+  //       height: height,
+  //       margin: const EdgeInsets.only(left: 20, right: 20),
+  //       decoration: BoxDecoration(
+  //         borderRadius: BorderRadius.circular(10),
+  //         border: Border.all(
+  //           color: Colors.black,
+  //           width: 1,
+  //         ),
+  //       ),
+  //       child: Column(
+  //         children: [
+  //           ZefyrToolbar.basic(
+  //             controller: _controller,
+  //           ),
+  //           ZefyrEditor(
+  //             controller: _controller,
+  //           ),
+  //         ],
+  //       ));
+  // }
 
   Widget _buildAdditionalDetails() {
     return LayoutBuilder(
