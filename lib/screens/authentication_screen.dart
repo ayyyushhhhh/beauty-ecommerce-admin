@@ -32,13 +32,13 @@ class _AuthenticationScreenState extends State<AuthenticationScreen> {
                   _email = value;
                 },
                 decoration: InputDecoration(
-                  label: Text('Email Address'),
+                  label: const Text('Email Address'),
                   contentPadding: const EdgeInsets.all(10),
                   fillColor: Colors.white,
                   filled: true,
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(10),
-                    borderSide: BorderSide(
+                    borderSide: const BorderSide(
                       color: Colors.black,
                       width: 1,
                     ),
@@ -47,7 +47,7 @@ class _AuthenticationScreenState extends State<AuthenticationScreen> {
               ),
             ),
           ),
-          SizedBox(
+          const SizedBox(
             height: 20,
           ),
           SizedBox(
@@ -59,13 +59,13 @@ class _AuthenticationScreenState extends State<AuthenticationScreen> {
                 _password = value;
               },
               decoration: InputDecoration(
-                label: Text('Password'),
+                label: const Text('Password'),
                 contentPadding: const EdgeInsets.all(10),
                 fillColor: Colors.white,
                 filled: true,
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(10),
-                  borderSide: BorderSide(
+                  borderSide: const BorderSide(
                     color: Colors.black,
                     width: 1,
                   ),
@@ -73,7 +73,7 @@ class _AuthenticationScreenState extends State<AuthenticationScreen> {
               ),
             ),
           ),
-          SizedBox(
+          const SizedBox(
             height: 20,
           ),
           ElevatedButton(
@@ -88,7 +88,7 @@ class _AuthenticationScreenState extends State<AuthenticationScreen> {
                     Navigator.pushReplacement(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => UploadDataScreen()),
+                          builder: (context) => const UploadDataScreen()),
                     );
                   }
                 } on FirebaseException catch (e) {
@@ -100,10 +100,10 @@ class _AuthenticationScreenState extends State<AuthenticationScreen> {
             child: Container(
               height: 70,
               width: 300,
-              decoration: BoxDecoration(
+              decoration: const BoxDecoration(
                 color: Colors.purple,
               ),
-              child: Align(
+              child: const Align(
                 alignment: Alignment.center,
                 child: Text(
                   "Login",

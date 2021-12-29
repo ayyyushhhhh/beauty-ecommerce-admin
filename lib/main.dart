@@ -1,13 +1,11 @@
 import 'package:beauty_app/screens/authentication_screen.dart';
-import 'package:beauty_app/screens/products_screen.dart';
-import 'package:beauty_app/screens/upload_data_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
-    options: FirebaseOptions(
+    options: const FirebaseOptions(
         apiKey: "AIzaSyDwPeB_L76rcuwwViLi2qFsgsAjy4EMR84",
         authDomain: "beautyapp-2c788.firebaseapp.com",
         projectId: "beautyapp-2c788",
@@ -28,7 +26,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.purple,
       ),
-      home: const ProductsScreen(),
+      home: const AuthenticationScreen(),
     );
   }
 }

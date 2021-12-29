@@ -1,9 +1,9 @@
-import 'dart:convert';
+// ignore_for_file: constant_identifier_names
+
 import 'dart:math';
 
 import 'package:beauty_app/models/product_model.dart';
 import 'package:beauty_app/screens/preview_data_screen.dart';
-import 'package:beauty_app/services/firebase/cloud_database.dart';
 import 'package:beauty_app/widgets/error_widget.dart';
 
 import 'package:beauty_app/widgets/file_upload_button.dart';
@@ -25,8 +25,8 @@ enum _textFieldType {
 }
 
 class UploadDataScreen extends StatefulWidget {
-  final ProductModel? productModel;
-  const UploadDataScreen({Key? key, this.productModel}) : super(key: key);
+  final ProductModel? product;
+  const UploadDataScreen({Key? key, this.product}) : super(key: key);
 
   @override
   _UploadDataScreenState createState() => _UploadDataScreenState();
@@ -47,13 +47,28 @@ class _UploadDataScreenState extends State<UploadDataScreen> {
   late String _nameOfImporter = "";
   late String _addressofImporter = "";
   late String id;
-  ZefyrController _controller = ZefyrController();
+  final ZefyrController _controller = ZefyrController();
 
   @override
   void initState() {
     super.initState();
-    if (widget.productModel?.id == null) {
-      id = Random.secure().nextInt(1000000).toString();
+    if (widget.product == null) {
+      id = Random().nextInt(1000000).toString();
+    } else {
+      id = widget.product!.id.toString();
+      _name = widget.product!.name;
+      _mrp = widget.product!.mrp.toString();
+      _quantity = widget.product!.quantity.toString();
+      _productDescription = widget.product!.productDescription;
+      _features = widget.product!.features;
+      _benefits = widget.product!.benefits;
+      _ingredients = widget.product!.ingredients;
+      _inStocks = widget.product!.inStocks;
+      _crueltyFree = widget.product!.crueltyFree;
+      _countryofOrigin = widget.product!.countryofOrigin;
+      _nameOfImporter = widget.product!.nameOfImporter;
+      _addressofImporter = widget.product!.addressofImporter;
+      _images = widget.product!.images;
     }
   }
 
@@ -61,20 +76,21 @@ class _UploadDataScreenState extends State<UploadDataScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Upload Data"),
+        title: const Text("Upload Data"),
         centerTitle: false,
       ),
       body: SingleChildScrollView(
         child: Container(
-          padding: EdgeInsets.all(20),
+          padding: const EdgeInsets.all(20),
           child: Column(
             children: [
               FileUploadArea(
+                imagePaths: _images,
                 onCountChanged: (String imageurl) {
                   _images.add(imageurl);
                 },
               ),
-              Align(
+              const Align(
                 alignment: Alignment.centerLeft,
                 child: Text(
                   "Product Name",
@@ -84,11 +100,13 @@ class _UploadDataScreenState extends State<UploadDataScreen> {
                   ),
                 ),
               ),
-              SizedBox(height: 10),
+              const SizedBox(height: 10),
               _buildTextField(
-                  inputTextFieldType: _textFieldType.Name, height: 50),
-              SizedBox(height: 10),
-              Align(
+                  inputTextFieldType: _textFieldType.Name,
+                  height: 50,
+                  initialData: _name),
+              const SizedBox(height: 10),
+              const Align(
                 alignment: Alignment.centerLeft,
                 child: Text(
                   "Product Description",
@@ -98,16 +116,17 @@ class _UploadDataScreenState extends State<UploadDataScreen> {
                   ),
                 ),
               ),
-              SizedBox(height: 10),
+              const SizedBox(height: 10),
               _buildTextField(
                   inputTextFieldType: _textFieldType.ProductDescription,
-                  height: 200),
-              SizedBox(height: 10),
+                  height: 200,
+                  initialData: _productDescription),
+              const SizedBox(height: 10),
               _buildAdditionalDetails(),
-              SizedBox(
+              const SizedBox(
                 height: 10,
               ),
-              Align(
+              const Align(
                 alignment: Alignment.centerLeft,
                 child: Text(
                   "Features",
@@ -117,11 +136,13 @@ class _UploadDataScreenState extends State<UploadDataScreen> {
                   ),
                 ),
               ),
-              SizedBox(height: 10),
+              const SizedBox(height: 10),
               _buildTextField(
-                  inputTextFieldType: _textFieldType.Features, height: 200),
-              SizedBox(height: 10),
-              Align(
+                  inputTextFieldType: _textFieldType.Features,
+                  height: 200,
+                  initialData: _features),
+              const SizedBox(height: 10),
+              const Align(
                 alignment: Alignment.centerLeft,
                 child: Text(
                   "Benefits",
@@ -131,11 +152,13 @@ class _UploadDataScreenState extends State<UploadDataScreen> {
                   ),
                 ),
               ),
-              SizedBox(height: 10),
+              const SizedBox(height: 10),
               _buildTextField(
-                  inputTextFieldType: _textFieldType.Benefits, height: 200),
-              SizedBox(height: 10),
-              Align(
+                  inputTextFieldType: _textFieldType.Benefits,
+                  height: 200,
+                  initialData: _benefits),
+              const SizedBox(height: 10),
+              const Align(
                 alignment: Alignment.centerLeft,
                 child: Text(
                   "Ingredients",
@@ -145,11 +168,13 @@ class _UploadDataScreenState extends State<UploadDataScreen> {
                   ),
                 ),
               ),
-              SizedBox(height: 10),
+              const SizedBox(height: 10),
               _buildTextField(
-                  inputTextFieldType: _textFieldType.Ingredients, height: 200),
-              SizedBox(height: 10),
-              Align(
+                  inputTextFieldType: _textFieldType.Ingredients,
+                  height: 200,
+                  initialData: _ingredients),
+              const SizedBox(height: 10),
+              const Align(
                 alignment: Alignment.centerLeft,
                 child: Text(
                   "Country of Origin",
@@ -159,12 +184,13 @@ class _UploadDataScreenState extends State<UploadDataScreen> {
                   ),
                 ),
               ),
-              SizedBox(height: 10),
+              const SizedBox(height: 10),
               _buildTextField(
                   inputTextFieldType: _textFieldType.CountryOfOrigin,
-                  height: 50),
-              SizedBox(height: 10),
-              Align(
+                  height: 50,
+                  initialData: _countryofOrigin),
+              const SizedBox(height: 10),
+              const Align(
                 alignment: Alignment.centerLeft,
                 child: Text(
                   "Importer Name",
@@ -174,12 +200,13 @@ class _UploadDataScreenState extends State<UploadDataScreen> {
                   ),
                 ),
               ),
-              SizedBox(height: 10),
+              const SizedBox(height: 10),
               _buildTextField(
                   inputTextFieldType: _textFieldType.NameOfImporter,
-                  height: 100),
-              SizedBox(height: 10),
-              Align(
+                  height: 100,
+                  initialData: _nameOfImporter),
+              const SizedBox(height: 10),
+              const Align(
                 alignment: Alignment.centerLeft,
                 child: Text(
                   "Address Importer",
@@ -189,15 +216,16 @@ class _UploadDataScreenState extends State<UploadDataScreen> {
                   ),
                 ),
               ),
-              SizedBox(height: 10),
+              const SizedBox(height: 10),
               _buildTextField(
                   inputTextFieldType: _textFieldType.ImporterAddress,
-                  height: 100),
-              SizedBox(height: 10),
+                  height: 100,
+                  initialData: _addressofImporter),
+              const SizedBox(height: 10),
               ElevatedButton(
                 onPressed: () {
                   if (_addressofImporter != "" &&
-                      _images.length != 0 &&
+                      _images.isNotEmpty &&
                       _ingredients != "" &&
                       _benefits != "" &&
                       _countryofOrigin != "" &&
@@ -218,10 +246,10 @@ class _UploadDataScreenState extends State<UploadDataScreen> {
                 child: Container(
                   height: 70,
                   width: double.infinity,
-                  decoration: BoxDecoration(
+                  decoration: const BoxDecoration(
                     color: Colors.purple,
                   ),
-                  child: Align(
+                  child: const Align(
                     alignment: Alignment.center,
                     child: Text(
                       "PREVIEW",
@@ -270,13 +298,14 @@ class _UploadDataScreenState extends State<UploadDataScreen> {
   Widget _buildTextField({
     required double height,
     required _textFieldType inputTextFieldType,
+    required String initialData,
   }) {
-    return Container(
+    return SizedBox(
       width: double.infinity,
       height: height,
       // margin: const EdgeInsets.only(left: 20, right: 20),
       child: TextField(
-        expands: true,
+        controller: TextEditingController()..text = initialData,
         textAlign: TextAlign.start,
         textInputAction: TextInputAction.newline,
         keyboardType: TextInputType.multiline,
@@ -312,7 +341,7 @@ class _UploadDataScreenState extends State<UploadDataScreen> {
           filled: true,
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(10),
-            borderSide: BorderSide(
+            borderSide: const BorderSide(
               color: Colors.black,
               width: 1,
             ),
@@ -358,46 +387,49 @@ class _UploadDataScreenState extends State<UploadDataScreen> {
             children: [
               Row(
                 children: [
-                  Text(
+                  const Text(
                     "MRP : ₹",
                     style: TextStyle(
                       fontSize: 24,
                       fontWeight: FontWeight.w800,
                     ),
                   ),
-                  SizedBox(width: 10),
+                  const SizedBox(width: 10),
                   SizedBox(
                       width: 100,
                       child: _buildTextField(
-                          height: 40, inputTextFieldType: _textFieldType.MRP)),
-                  SizedBox(width: 10),
+                          height: 40,
+                          inputTextFieldType: _textFieldType.MRP,
+                          initialData: _mrp)),
+                  const SizedBox(width: 10),
                 ],
               ),
               Row(
                 children: [
-                  Text(
+                  const Text(
                     "Quantity : ",
                     style: TextStyle(
                       fontSize: 24,
                       fontWeight: FontWeight.w800,
                     ),
                   ),
-                  SizedBox(width: 10),
+                  const SizedBox(width: 10),
                   SizedBox(
                       width: 100,
                       child: _buildTextField(
                           height: 40,
-                          inputTextFieldType: _textFieldType.Quantity)),
+                          inputTextFieldType: _textFieldType.Quantity,
+                          initialData: _quantity)),
                 ],
               ),
-              SizedBox(width: 10),
+              const SizedBox(width: 10),
               Row(
                 children: [
-                  Text(
+                  const Text(
                     'In Stocks?',
                     style: TextStyle(fontSize: 24),
                   ), //Text
-                  SizedBox(width: 10), //SizedBox
+                  const SizedBox(width: 10), //SizedBox
                   /** Checkbox Widget **/
                   Checkbox(
                     value: _inStocks,
@@ -411,14 +443,14 @@ class _UploadDataScreenState extends State<UploadDataScreen> {
               ),
               Row(
                 children: [
-                  SizedBox(
+                  const SizedBox(
                     width: 10,
                   ),
-                  Text(
+                  const Text(
                     'Cruelty Free ? ',
                     style: TextStyle(fontSize: 24),
                   ), //Text
-                  SizedBox(width: 10), //SizedBox
+                  const SizedBox(width: 10), //SizedBox
                   /** Checkbox Widget **/
                   Checkbox(
                     value: _crueltyFree,
@@ -439,51 +471,54 @@ class _UploadDataScreenState extends State<UploadDataScreen> {
             children: [
               Row(
                 children: [
-                  Text(
+                  const Text(
                     "MRP : ₹",
                     style: TextStyle(
                       fontSize: 24,
                       fontWeight: FontWeight.w800,
                     ),
                   ),
-                  SizedBox(width: 10),
+                  const SizedBox(width: 10),
                   SizedBox(
                       width: 100,
                       child: _buildTextField(
-                          height: 40, inputTextFieldType: _textFieldType.MRP)),
-                  SizedBox(width: 10),
+                          height: 40,
+                          inputTextFieldType: _textFieldType.MRP,
+                          initialData: _mrp)),
+                  const SizedBox(width: 10),
                 ],
               ),
-              SizedBox(
+              const SizedBox(
                 height: 10,
               ),
               Row(
                 children: [
-                  Text(
+                  const Text(
                     "Quantity : ",
                     style: TextStyle(
                       fontSize: 24,
                       fontWeight: FontWeight.w800,
                     ),
                   ),
-                  SizedBox(width: 10),
+                  const SizedBox(width: 10),
                   SizedBox(
                       width: 100,
                       child: _buildTextField(
                           height: 40,
-                          inputTextFieldType: _textFieldType.Quantity)),
+                          inputTextFieldType: _textFieldType.Quantity,
+                          initialData: _quantity)),
                 ],
               ),
-              SizedBox(
+              const SizedBox(
                 height: 10,
               ),
               Row(
                 children: [
-                  Text(
+                  const Text(
                     'In Stocks?',
                     style: TextStyle(fontSize: 24),
                   ), //Text
-                  SizedBox(width: 10), //SizedBox
+                  const SizedBox(width: 10), //SizedBox
                   /** Checkbox Widget **/
                   Checkbox(
                     value: _inStocks,
@@ -497,11 +532,11 @@ class _UploadDataScreenState extends State<UploadDataScreen> {
               ),
               Row(
                 children: [
-                  Text(
+                  const Text(
                     'Cruelty Free ? ',
                     style: TextStyle(fontSize: 24),
                   ), //Text
-                  SizedBox(width: 10), //SizedBox
+                  const SizedBox(width: 10), //SizedBox
                   /** Checkbox Widget **/
                   Checkbox(
                     value: _crueltyFree,

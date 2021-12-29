@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_unnecessary_containers
+
 import 'dart:typed_data';
 
 import 'package:beauty_app/services/firebase/cloud_storage.dart';
@@ -10,8 +12,10 @@ import 'exception_alert_dialog.dart';
 
 class FileUploadArea extends StatefulWidget {
   final Function(String) onCountChanged;
-
-  FileUploadArea({Key? key, required this.onCountChanged}) : super(key: key);
+  final List<String>? imagePaths;
+  const FileUploadArea(
+      {Key? key, required this.onCountChanged, this.imagePaths})
+      : super(key: key);
 
   @override
   _FileUploadAreaState createState() => _FileUploadAreaState();
@@ -19,6 +23,15 @@ class FileUploadArea extends StatefulWidget {
 
 class _FileUploadAreaState extends State<FileUploadArea> {
   List<String> _filesPath = [];
+
+  @override
+  void initState() {
+    super.initState();
+    if (widget.imagePaths != null) {
+      _filesPath = widget.imagePaths!;
+    }
+  }
+
   bool _isLoading = false;
   _uploadImage() async {
     final picker = ImagePicker();
@@ -32,6 +45,7 @@ class _FileUploadAreaState extends State<FileUploadArea> {
       final fileUrl = await CloudStorage()
           .uploadFile(imageBytes: bytes, filePath: 'files/${image.name}.png');
       if (fileUrl != null)
+        // ignore: curly_braces_in_flow_control_structures
         setState(() {
           _filesPath.add(fileUrl);
           widget.onCountChanged(fileUrl);
@@ -46,8 +60,8 @@ class _FileUploadAreaState extends State<FileUploadArea> {
   @override
   Widget build(BuildContext context) {
     return Container(
-        margin: EdgeInsets.only(bottom: 10),
-        padding: EdgeInsets.all(10),
+        margin: const EdgeInsets.only(bottom: 10),
+        padding: const EdgeInsets.all(10),
         width: double.infinity,
         decoration: BoxDecoration(
           color: Colors.white,
@@ -57,7 +71,7 @@ class _FileUploadAreaState extends State<FileUploadArea> {
               color: Colors.grey.withOpacity(0.5),
               spreadRadius: 5,
               blurRadius: 7,
-              offset: Offset(0, 3), // changes position of shadow
+              offset: const Offset(0, 3), // changes position of shadow
             ),
           ],
         ),
@@ -69,12 +83,12 @@ class _FileUploadAreaState extends State<FileUploadArea> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Icon(
+                    const Icon(
                       Icons.cloud_upload,
                       size: 50,
                       color: Colors.grey,
                     ),
-                    Center(
+                    const Center(
                       child: Text(
                         "Upload Image",
                         style: TextStyle(fontSize: 30),
@@ -82,25 +96,25 @@ class _FileUploadAreaState extends State<FileUploadArea> {
                     ),
                     if (_isLoading)
                       Container(
-                        margin: EdgeInsets.only(top: 10),
-                        child: CircularProgressIndicator(),
+                        margin: const EdgeInsets.only(top: 10),
+                        child: const CircularProgressIndicator(),
                       ),
                   ],
                 ),
               ),
             ),
-            Divider(
+            const Divider(
               thickness: 1,
               color: Colors.grey,
             ),
-            SizedBox(
+            const SizedBox(
               height: 5,
             ),
             GridView.builder(
               shrinkWrap: true,
               //itemCount: images.length,
               itemCount: _filesPath.length,
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 5, mainAxisSpacing: 10, crossAxisSpacing: 10),
               itemBuilder: (BuildContext context, int index) {
                 return Container(

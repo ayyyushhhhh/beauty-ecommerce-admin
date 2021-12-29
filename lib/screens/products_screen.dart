@@ -16,29 +16,39 @@ class _ProductsScreenState extends State<ProductsScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.add),
+        child: const Icon(Icons.add),
         onPressed: () {
           Navigator.of(context).push(
-              MaterialPageRoute(builder: (context) => UploadDataScreen()));
+            MaterialPageRoute(
+              builder: (context) => const UploadDataScreen(),
+            ),
+          );
         },
       ),
-      body: FutureBuilder(
-        future: CloudDatabase().getProductsData(),
-        builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
-          if (snapshot.hasData) {
-            List<ProductModel> products = snapshot.data;
-            return ListView.builder(
-              itemCount: products.length,
-              itemBuilder: (BuildContext context, int index) {
-                return ProductContainer(product: products[index]);
-              },
-            );
-          } else {
-            return Center(
-              child: Text("No Products Avaiable"),
-            );
-          }
-        },
+      body: SingleChildScrollView(
+        child: FutureBuilder(
+          future: CloudDatabase().getProductsData(),
+          builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
+            if (snapshot.hasData) {
+              List<ProductModel> products = snapshot.data;
+              return ListView.builder(
+                shrinkWrap: true,
+                itemCount: products.length,
+                itemBuilder: (BuildContext context, int index) {
+                  return ProductContainer(product: products[index]);
+                },
+              );
+            } else if (!snapshot.hasData) {
+              return const Center(
+                child: Text("No Products Available"),
+              );
+            } else {
+              return const Center(
+                child: CircularProgressIndicator(),
+              );
+            }
+          },
+        ),
       ),
     );
   }

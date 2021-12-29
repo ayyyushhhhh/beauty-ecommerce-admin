@@ -7,7 +7,7 @@ class FirebaseAuthentication {
   }
 
   Future<User?> getCurrentUser() async {
-    final User? user = await _firebaseAuth.currentUser!;
+    final User? user = _firebaseAuth.currentUser!;
     return user;
   }
 

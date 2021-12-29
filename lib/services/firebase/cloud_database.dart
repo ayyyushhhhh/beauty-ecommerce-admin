@@ -21,7 +21,7 @@ class CloudDatabase {
   }
 
   Future<List<ProductModel>> getProductsData() async {
-    final String productpath = "Products/";
+    const String productpath = "Products/";
     try {
       final CollectionReference refrence = _firestore.collection(productpath);
       final QuerySnapshot productSnapshot = await refrence.get();

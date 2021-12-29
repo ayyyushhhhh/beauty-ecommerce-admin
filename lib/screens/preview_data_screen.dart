@@ -23,7 +23,7 @@ class _PreviewScreenState extends State<PreviewScreen> {
       ),
       body: SingleChildScrollView(
         child: Container(
-          padding: EdgeInsets.all(10),
+          padding: const EdgeInsets.all(10),
           child: Column(
             children: [
               CarouselSlider(
@@ -36,8 +36,8 @@ class _PreviewScreenState extends State<PreviewScreen> {
                     builder: (BuildContext context) {
                       return Container(
                         width: MediaQuery.of(context).size.width,
-                        margin: EdgeInsets.symmetric(horizontal: 5.0),
-                        decoration: BoxDecoration(color: Colors.white),
+                        margin: const EdgeInsets.symmetric(horizontal: 5.0),
+                        decoration: const BoxDecoration(color: Colors.white),
                         child: Image.network(image),
                       );
                     },
@@ -46,35 +46,35 @@ class _PreviewScreenState extends State<PreviewScreen> {
               ),
               _buildDataWidget(
                   title: "Product Name", value: widget.product.name),
-              SizedBox(height: 10),
+              const SizedBox(height: 10),
               _buildDataWidget(
                   title: "Price", value: "₹ " + widget.product.mrp),
-              SizedBox(height: 10),
+              const SizedBox(height: 10),
               _buildDataWidget(
                   title: "Quantity", value: widget.product.quantity),
-              SizedBox(height: 10),
+              const SizedBox(height: 10),
               _buildDataWidget(
                   title: "Product Description",
                   value: widget.product.productDescription),
-              SizedBox(height: 10),
+              const SizedBox(height: 10),
               Container(
-                margin: EdgeInsets.all(20),
+                margin: const EdgeInsets.all(20),
                 child: Column(
                   children: [
                     Row(
                       children: [
-                        Text("Cruelty Free: "),
-                        SizedBox(width: 10),
+                        const Text("Cruelty Free: "),
+                        const SizedBox(width: 10),
                         Checkbox(
                             value: widget.product.crueltyFree,
                             onChanged: (value) {}),
                       ],
                     ),
-                    SizedBox(height: 10),
+                    const SizedBox(height: 10),
                     Row(
                       children: [
-                        Text("In Stocks: "),
-                        SizedBox(width: 10),
+                        const Text("In Stocks: "),
+                        const SizedBox(width: 10),
                         Checkbox(
                             value: widget.product.inStocks,
                             onChanged: (value) {}),
@@ -83,29 +83,29 @@ class _PreviewScreenState extends State<PreviewScreen> {
                   ],
                 ),
               ),
-              SizedBox(height: 10),
+              const SizedBox(height: 10),
               _buildDataWidget(
                   title: "Benefits", value: widget.product.benefits),
-              SizedBox(height: 10),
+              const SizedBox(height: 10),
               _buildDataWidget(
                   title: "Ingredients", value: widget.product.ingredients),
-              SizedBox(height: 10),
+              const SizedBox(height: 10),
               _buildDataWidget(
                   title: "Importer Address",
                   value: widget.product.addressofImporter),
-              SizedBox(height: 10),
+              const SizedBox(height: 10),
               _buildDataWidget(
                   title: "Importer Name", value: widget.product.nameOfImporter),
-              SizedBox(height: 10),
+              const SizedBox(height: 10),
               ElevatedButton(
                 onPressed: _uploadProduct,
                 child: Container(
                   height: 70,
                   width: double.infinity,
-                  decoration: BoxDecoration(
+                  decoration: const BoxDecoration(
                     color: Colors.purple,
                   ),
-                  child: Align(
+                  child: const Align(
                     alignment: Alignment.center,
                     child: Text(
                       "SUBMIT",
@@ -138,8 +138,8 @@ class _PreviewScreenState extends State<PreviewScreen> {
 
   Widget _buildDataWidget({required String title, required String value}) {
     return Container(
-      padding: EdgeInsets.all(10),
-      margin: EdgeInsets.all(10),
+      padding: const EdgeInsets.all(10),
+      margin: const EdgeInsets.all(10),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(10),
         border: Border.all(
@@ -154,18 +154,18 @@ class _PreviewScreenState extends State<PreviewScreen> {
             alignment: Alignment.centerLeft,
             child: Text(
               title,
-              style: TextStyle(
+              style: const TextStyle(
                 fontSize: 24,
                 fontWeight: FontWeight.w800,
               ),
             ),
           ),
-          SizedBox(width: 10),
+          const SizedBox(width: 10),
           Align(
             alignment: Alignment.centerLeft,
             child: Text(
               value,
-              style: TextStyle(
+              style: const TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.w400,
               ),
