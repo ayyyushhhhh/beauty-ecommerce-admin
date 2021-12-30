@@ -7,8 +7,12 @@ class FirebaseAuthentication {
   }
 
   Future<User?> getCurrentUser() async {
-    final User? user = _firebaseAuth.currentUser!;
-    return user;
+    try {
+      final User? user = _firebaseAuth.currentUser!;
+      return user;
+    } catch (e) {
+      return null;
+    }
   }
 
   Future<User?> signInWithEmailAndPassword(

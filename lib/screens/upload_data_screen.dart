@@ -1,24 +1,23 @@
 // ignore_for_file: constant_identifier_names
 
+import 'dart:convert';
 import 'dart:math';
 
 import 'package:beauty_app/models/product_model.dart';
 import 'package:beauty_app/screens/preview_data_screen.dart';
+
 import 'package:beauty_app/widgets/error_widget.dart';
 
 import 'package:beauty_app/widgets/file_upload_button.dart';
 
 import 'package:flutter/material.dart';
+
 import 'package:zefyrka/zefyrka.dart';
 
 enum _textFieldType {
   Name,
   MRP,
   Quantity,
-  ProductDescription,
-  Features,
-  Benefits,
-  Ingredients,
   CountryOfOrigin,
   NameOfImporter,
   ImporterAddress,
@@ -33,7 +32,8 @@ class UploadDataScreen extends StatefulWidget {
 }
 
 class _UploadDataScreenState extends State<UploadDataScreen> {
-  List<String> _images = [];
+  // ignore: prefer_final_fields
+  late List<String> _images = [];
   String _name = "";
   String _mrp = "";
   String _quantity = "";
@@ -47,11 +47,16 @@ class _UploadDataScreenState extends State<UploadDataScreen> {
   late String _nameOfImporter = "";
   late String _addressofImporter = "";
   late String id;
-  final ZefyrController _controller = ZefyrController();
-
+  ZefyrController _productDescriptionController = ZefyrController();
+  ZefyrController _featuresController = ZefyrController();
+  ZefyrController _benefitsController = ZefyrController();
+  ZefyrController _ingredientsController = ZefyrController();
+  List<String> _previewImages = [];
+  late FocusNode _focusNode;
   @override
   void initState() {
     super.initState();
+    _focusNode = FocusNode();
     if (widget.product == null) {
       id = Random().nextInt(1000000).toString();
     } else {
@@ -60,14 +65,24 @@ class _UploadDataScreenState extends State<UploadDataScreen> {
       _mrp = widget.product!.mrp.toString();
       _quantity = widget.product!.quantity.toString();
       _productDescription = widget.product!.productDescription;
-      _features = widget.product!.features;
-      _benefits = widget.product!.benefits;
-      _ingredients = widget.product!.ingredients;
+      _featuresController = ZefyrController(
+        NotusDocument.fromJson(jsonDecode(widget.product!.features)),
+      );
+      _benefitsController = ZefyrController(
+        NotusDocument.fromJson(jsonDecode(widget.product!.benefits)),
+      );
+      _ingredientsController = ZefyrController(
+        NotusDocument.fromJson(jsonDecode(widget.product!.ingredients)),
+      );
+      _productDescriptionController = ZefyrController(
+        NotusDocument.fromJson(jsonDecode(widget.product!.productDescription)),
+      );
       _inStocks = widget.product!.inStocks;
       _crueltyFree = widget.product!.crueltyFree;
       _countryofOrigin = widget.product!.countryofOrigin;
       _nameOfImporter = widget.product!.nameOfImporter;
       _addressofImporter = widget.product!.addressofImporter;
+      _previewImages = widget.product!.images;
       _images = widget.product!.images;
     }
   }
@@ -85,7 +100,7 @@ class _UploadDataScreenState extends State<UploadDataScreen> {
           child: Column(
             children: [
               FileUploadArea(
-                imagePaths: _images,
+                imagePaths: _previewImages,
                 onCountChanged: (String imageurl) {
                   _images.add(imageurl);
                 },
@@ -117,10 +132,11 @@ class _UploadDataScreenState extends State<UploadDataScreen> {
                 ),
               ),
               const SizedBox(height: 10),
-              _buildTextField(
-                  inputTextFieldType: _textFieldType.ProductDescription,
-                  height: 200,
-                  initialData: _productDescription),
+              _buildZefrkaTextField(
+                controller: _productDescriptionController,
+                height: 200,
+                focusNode: FocusNode(),
+              ),
               const SizedBox(height: 10),
               _buildAdditionalDetails(),
               const SizedBox(
@@ -137,10 +153,11 @@ class _UploadDataScreenState extends State<UploadDataScreen> {
                 ),
               ),
               const SizedBox(height: 10),
-              _buildTextField(
-                  inputTextFieldType: _textFieldType.Features,
-                  height: 200,
-                  initialData: _features),
+              _buildZefrkaTextField(
+                controller: _featuresController,
+                focusNode: FocusNode(),
+                height: 200,
+              ),
               const SizedBox(height: 10),
               const Align(
                 alignment: Alignment.centerLeft,
@@ -153,10 +170,11 @@ class _UploadDataScreenState extends State<UploadDataScreen> {
                 ),
               ),
               const SizedBox(height: 10),
-              _buildTextField(
-                  inputTextFieldType: _textFieldType.Benefits,
-                  height: 200,
-                  initialData: _benefits),
+              _buildZefrkaTextField(
+                controller: _benefitsController,
+                focusNode: FocusNode(),
+                height: 200,
+              ),
               const SizedBox(height: 10),
               const Align(
                 alignment: Alignment.centerLeft,
@@ -169,10 +187,11 @@ class _UploadDataScreenState extends State<UploadDataScreen> {
                 ),
               ),
               const SizedBox(height: 10),
-              _buildTextField(
-                  inputTextFieldType: _textFieldType.Ingredients,
-                  height: 200,
-                  initialData: _ingredients),
+              _buildZefrkaTextField(
+                controller: _ingredientsController,
+                focusNode: FocusNode(),
+                height: 200,
+              ),
               const SizedBox(height: 10),
               const Align(
                 alignment: Alignment.centerLeft,
@@ -224,6 +243,11 @@ class _UploadDataScreenState extends State<UploadDataScreen> {
               const SizedBox(height: 10),
               ElevatedButton(
                 onPressed: () {
+                  _productDescription =
+                      jsonEncode(_productDescriptionController.document);
+                  _features = jsonEncode(_featuresController.document);
+                  _benefits = jsonEncode(_featuresController.document);
+                  _ingredients = jsonEncode(_ingredientsController.document);
                   if (_addressofImporter != "" &&
                       _images.isNotEmpty &&
                       _ingredients != "" &&
@@ -286,11 +310,12 @@ class _UploadDataScreenState extends State<UploadDataScreen> {
         countryofOrigin: _countryofOrigin,
         nameOfImporter: _nameOfImporter,
         addressofImporter: _addressofImporter);
-    Navigator.of(context).push(
+    Navigator.push(
+      context,
       MaterialPageRoute(
-        builder: (BuildContext context) {
-          return PreviewScreen(product: product);
-        },
+        builder: (context) => PreviewScreen(
+          product: product,
+        ),
       ),
     );
   }
@@ -319,14 +344,6 @@ class _UploadDataScreenState extends State<UploadDataScreen> {
             _mrp = value;
           } else if (inputTextFieldType == _textFieldType.Quantity) {
             _quantity = value;
-          } else if (inputTextFieldType == _textFieldType.ProductDescription) {
-            _productDescription = value;
-          } else if (inputTextFieldType == _textFieldType.Features) {
-            _features = value;
-          } else if (inputTextFieldType == _textFieldType.Benefits) {
-            _benefits = value;
-          } else if (inputTextFieldType == _textFieldType.Ingredients) {
-            _ingredients = value;
           } else if (inputTextFieldType == _textFieldType.NameOfImporter) {
             _nameOfImporter = value;
           } else if (inputTextFieldType == _textFieldType.CountryOfOrigin) {
@@ -351,33 +368,46 @@ class _UploadDataScreenState extends State<UploadDataScreen> {
     );
   }
 
-  // Widget _buildTextField({
-  //   required double height,
-  //   required _textFieldType inputTextFieldType,
-  // }) {
-  //   return Container(
-  //       width: double.infinity,
-  //       padding: EdgeInsets.all(10),
-  //       height: height,
-  //       margin: const EdgeInsets.only(left: 20, right: 20),
-  //       decoration: BoxDecoration(
-  //         borderRadius: BorderRadius.circular(10),
-  //         border: Border.all(
-  //           color: Colors.black,
-  //           width: 1,
-  //         ),
-  //       ),
-  //       child: Column(
-  //         children: [
-  //           ZefyrToolbar.basic(
-  //             controller: _controller,
-  //           ),
-  //           ZefyrEditor(
-  //             controller: _controller,
-  //           ),
-  //         ],
-  //       ));
-  // }
+  Widget _buildZefrkaTextField({
+    required double height,
+    required ZefyrController controller,
+    required FocusNode focusNode,
+  }) {
+    return GestureDetector(
+      onTap: () {
+        focusNode.requestFocus();
+      },
+      child: Container(
+        width: double.infinity,
+        height: 1.5 * height,
+        padding: const EdgeInsets.all(10),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(10),
+          border: Border.all(
+            color: Colors.black,
+            width: 1,
+          ),
+        ),
+        child: Column(
+          children: [
+            ZefyrToolbar.basic(
+              controller: controller,
+            ),
+            const Divider(
+              thickness: 1,
+            ),
+            ZefyrEditor(
+              focusNode: focusNode,
+              minHeight: height,
+              maxHeight: height,
+              scrollable: true,
+              controller: controller,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
 
   Widget _buildAdditionalDetails() {
     return LayoutBuilder(

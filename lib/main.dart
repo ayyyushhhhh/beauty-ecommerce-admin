@@ -1,4 +1,7 @@
+import 'package:beauty_app/models/routes_class.dart';
 import 'package:beauty_app/screens/authentication_screen.dart';
+import 'package:beauty_app/screens/products_screen.dart';
+import 'package:beauty_app/screens/upload_data_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 
@@ -26,6 +29,17 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.purple,
       ),
+      initialRoute: Routes().login,
+      routes: {
+        Routes().allProducts: (context) =>
+            const ProductsScreen(), // Show All Products
+        Routes().login: (context) =>
+            const AuthenticationScreen(), // Log in Page
+        Routes().addProduct: (context) =>
+            const UploadDataScreen(), // Add Product Page
+        Routes().editProduct: (context) =>
+            const UploadDataScreen(), // Upload Product Page
+      },
       home: const AuthenticationScreen(),
     );
   }

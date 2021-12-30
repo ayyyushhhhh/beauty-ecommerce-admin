@@ -9,7 +9,7 @@ class CloudDatabase {
   }
 
   Future<void> uploadProductData(Map<String, dynamic> product) async {
-    final String productpath = "Products/${product["id"]}}";
+    final String productpath = "Products/${product["id"]}";
 
     try {
       final DocumentReference<Map<String, dynamic>> cloudRef =

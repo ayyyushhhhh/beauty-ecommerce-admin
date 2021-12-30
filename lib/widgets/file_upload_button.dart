@@ -1,5 +1,3 @@
-// ignore_for_file: avoid_unnecessary_containers
-
 import 'dart:typed_data';
 
 import 'package:beauty_app/services/firebase/cloud_storage.dart';
@@ -77,30 +75,28 @@ class _FileUploadAreaState extends State<FileUploadArea> {
         ),
         child: Column(
           children: [
-            Container(
-              child: InkWell(
-                onTap: _uploadImage,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    const Icon(
-                      Icons.cloud_upload,
-                      size: 50,
-                      color: Colors.grey,
+            InkWell(
+              onTap: _uploadImage,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Icon(
+                    Icons.cloud_upload,
+                    size: 50,
+                    color: Colors.grey,
+                  ),
+                  const Center(
+                    child: Text(
+                      "Upload Image",
+                      style: TextStyle(fontSize: 30),
                     ),
-                    const Center(
-                      child: Text(
-                        "Upload Image",
-                        style: TextStyle(fontSize: 30),
-                      ),
+                  ),
+                  if (_isLoading)
+                    Container(
+                      margin: const EdgeInsets.only(top: 10),
+                      child: const CircularProgressIndicator(),
                     ),
-                    if (_isLoading)
-                      Container(
-                        margin: const EdgeInsets.only(top: 10),
-                        child: const CircularProgressIndicator(),
-                      ),
-                  ],
-                ),
+                ],
               ),
             ),
             const Divider(
@@ -117,11 +113,9 @@ class _FileUploadAreaState extends State<FileUploadArea> {
               gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 5, mainAxisSpacing: 10, crossAxisSpacing: 10),
               itemBuilder: (BuildContext context, int index) {
-                return Container(
-                  child: Image.network(
-                    _filesPath[index],
-                    fit: BoxFit.cover,
-                  ),
+                return Image.network(
+                  _filesPath[index],
+                  fit: BoxFit.cover,
                 );
               },
             ),

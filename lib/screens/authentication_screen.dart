@@ -1,4 +1,4 @@
-import 'package:beauty_app/screens/upload_data_screen.dart';
+import 'package:beauty_app/models/routes_class.dart';
 import 'package:beauty_app/services/firebase/firebase_auth.dart';
 import 'package:beauty_app/widgets/exception_alert_dialog.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -55,6 +55,7 @@ class _AuthenticationScreenState extends State<AuthenticationScreen> {
             height: 50,
             child: TextField(
               maxLines: 1,
+              obscureText: true,
               onChanged: (value) {
                 _password = value;
               },
@@ -85,11 +86,8 @@ class _AuthenticationScreenState extends State<AuthenticationScreen> {
                           email: _email.toString(),
                           password: _password.toString());
                   if (user != null) {
-                    Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const UploadDataScreen()),
-                    );
+                    Navigator.pushReplacementNamed(
+                        context, Routes().allProducts);
                   }
                 } on FirebaseException catch (e) {
                   showExceptionAlertDialog(context,
