@@ -9,7 +9,7 @@ import 'package:image_picker/image_picker.dart';
 import 'exception_alert_dialog.dart';
 
 class FileUploadArea extends StatefulWidget {
-  final Function(String) onCountChanged;
+  final Function(String?, int?) onCountChanged;
   final List<String>? imagePaths;
   const FileUploadArea(
       {Key? key, required this.onCountChanged, this.imagePaths})
@@ -46,7 +46,7 @@ class _FileUploadAreaState extends State<FileUploadArea> {
         // ignore: curly_braces_in_flow_control_structures
         setState(() {
           _filesPath.add(fileUrl);
-          widget.onCountChanged(fileUrl);
+          widget.onCountChanged(fileUrl, 0);
           _isLoading = false;
         });
     } on FirebaseException catch (e) {
@@ -113,10 +113,33 @@ class _FileUploadAreaState extends State<FileUploadArea> {
               gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 5, mainAxisSpacing: 10, crossAxisSpacing: 10),
               itemBuilder: (BuildContext context, int index) {
-                return Image.network(
-                  _filesPath[index],
-                  fit: BoxFit.cover,
-                );
+                return Stack(children: [
+                  Image.network(
+                    _filesPath[index],
+                    fit: BoxFit.cover,
+                  ),
+                  Positioned(
+                    top: 10,
+                    right: 10,
+                    child: GestureDetector(
+                      onTap: () {
+                        setState(() {
+                          _filesPath.removeAt(index);
+                          widget.onCountChanged(null, index);
+                        });
+                      },
+                      child: Container(
+                        height: 30,
+                        width: 30,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10),
+                          color: Colors.red,
+                        ),
+                        child: const Icon(Icons.minimize_outlined),
+                      ),
+                    ),
+                  ),
+                ]);
               },
             ),
           ],

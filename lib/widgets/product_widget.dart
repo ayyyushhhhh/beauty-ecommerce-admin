@@ -3,6 +3,7 @@
 import 'package:beauty_app/models/product_model.dart';
 import 'package:beauty_app/screens/preview_data_screen.dart';
 import 'package:beauty_app/screens/upload_data_screen.dart';
+import 'package:beauty_app/services/firebase/cloud_database.dart';
 import 'package:flutter/material.dart';
 
 class ProductContainer extends StatelessWidget {
@@ -29,8 +30,8 @@ class ProductContainer extends StatelessWidget {
       child: Row(
         children: [
           SizedBox(
-            height: 300,
-            width: 300,
+            height: 200,
+            width: 200,
             child: Image.network(product.images[0]),
           ),
           Expanded(
@@ -39,6 +40,22 @@ class ProductContainer extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      Text(product.id.toString()),
+                      const SizedBox(width: 10),
+                      Align(
+                        alignment: Alignment.centerRight,
+                        child: IconButton(
+                          icon: const Icon(Icons.delete),
+                          onPressed: () {
+                            CloudDatabase().deleteProduct(id: product.id);
+                          },
+                        ),
+                      ),
+                    ],
+                  ),
                   const SizedBox(height: 10),
                   Text(
                     product.name,

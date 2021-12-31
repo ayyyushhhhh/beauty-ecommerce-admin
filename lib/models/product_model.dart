@@ -13,7 +13,7 @@ class ProductModel {
   late String nameOfImporter;
   late String addressofImporter;
   late String id;
-
+  late String category;
   ProductModel({
     required this.id,
     required this.images,
@@ -29,6 +29,7 @@ class ProductModel {
     required this.countryofOrigin,
     required this.nameOfImporter,
     required this.addressofImporter,
+    required this.category,
   });
 
   Map<String, dynamic> toMap() {
@@ -47,6 +48,7 @@ class ProductModel {
       'countryofOrigin': countryofOrigin,
       'nameOfImporter': nameOfImporter,
       'addressofImporter': addressofImporter,
+      'category': category,
     };
   }
 
@@ -65,5 +67,6 @@ class ProductModel {
     nameOfImporter = map['nameOfImporter'];
     addressofImporter = map['addressofImporter'];
     id = map['id'];
+    category = map['category'] ?? "Skincare";
   }
 }

@@ -2,16 +2,11 @@
 
 import 'dart:convert';
 import 'dart:math';
-
 import 'package:beauty_app/models/product_model.dart';
 import 'package:beauty_app/screens/preview_data_screen.dart';
-
 import 'package:beauty_app/widgets/error_widget.dart';
-
 import 'package:beauty_app/widgets/file_upload_button.dart';
-
 import 'package:flutter/material.dart';
-
 import 'package:zefyrka/zefyrka.dart';
 
 enum _textFieldType {
@@ -52,11 +47,18 @@ class _UploadDataScreenState extends State<UploadDataScreen> {
   ZefyrController _benefitsController = ZefyrController();
   ZefyrController _ingredientsController = ZefyrController();
   List<String> _previewImages = [];
-  late FocusNode _focusNode;
+  String _productCatergory = "Skincare";
+  final List<String> _dropDownItems = [
+    "Skincare",
+    "Makeup",
+    "Anti-Ageing",
+    "Skin Protection",
+    "Hair Care",
+    "Personal Care",
+  ];
   @override
   void initState() {
     super.initState();
-    _focusNode = FocusNode();
     if (widget.product == null) {
       id = Random().nextInt(1000000).toString();
     } else {
@@ -84,6 +86,7 @@ class _UploadDataScreenState extends State<UploadDataScreen> {
       _addressofImporter = widget.product!.addressofImporter;
       _previewImages = widget.product!.images;
       _images = widget.product!.images;
+      _productCatergory = widget.product!.category;
     }
   }
 
@@ -101,10 +104,32 @@ class _UploadDataScreenState extends State<UploadDataScreen> {
             children: [
               FileUploadArea(
                 imagePaths: _previewImages,
-                onCountChanged: (String imageurl) {
-                  _images.add(imageurl);
+                onCountChanged: (String? imageurl, int? index) {
+                  if (imageurl != null) {
+                    _images.add(imageurl);
+                  } else {
+                    _images.removeAt(index!);
+                  }
                 },
               ),
+              const SizedBox(
+                height: 10,
+              ),
+              DropdownButton<String>(
+                  value: _productCatergory,
+                  items: _dropDownItems.map((String value) {
+                    return DropdownMenuItem<String>(
+                      value: value,
+                      child: Text(value),
+                    );
+                  }).toList(),
+                  onChanged: (value) {
+                    setState(() {
+                      if (value != null) {
+                        _productCatergory = value;
+                      }
+                    });
+                  }),
               const Align(
                 alignment: Alignment.centerLeft,
                 child: Text(
@@ -296,20 +321,22 @@ class _UploadDataScreenState extends State<UploadDataScreen> {
 
   void _sendPreview() {
     final ProductModel product = ProductModel(
-        id: id,
-        images: _images,
-        name: _name,
-        mrp: _mrp,
-        quantity: _quantity,
-        productDescription: _productDescription,
-        features: _features,
-        benefits: _benefits,
-        ingredients: _ingredients,
-        inStocks: _inStocks,
-        crueltyFree: _crueltyFree,
-        countryofOrigin: _countryofOrigin,
-        nameOfImporter: _nameOfImporter,
-        addressofImporter: _addressofImporter);
+      id: id,
+      images: _images,
+      name: _name,
+      mrp: _mrp,
+      quantity: _quantity,
+      productDescription: _productDescription,
+      features: _features,
+      benefits: _benefits,
+      ingredients: _ingredients,
+      inStocks: _inStocks,
+      crueltyFree: _crueltyFree,
+      countryofOrigin: _countryofOrigin,
+      nameOfImporter: _nameOfImporter,
+      addressofImporter: _addressofImporter,
+      category: _productCatergory,
+    );
     Navigator.push(
       context,
       MaterialPageRoute(
@@ -398,7 +425,6 @@ class _UploadDataScreenState extends State<UploadDataScreen> {
             ),
             ZefyrEditor(
               focusNode: focusNode,
-              minHeight: height,
               maxHeight: height,
               scrollable: true,
               controller: controller,

@@ -22,6 +22,7 @@ class CloudDatabase {
 
   Future<List<ProductModel>> getProductsData() async {
     const String productpath = "Products/";
+
     try {
       final CollectionReference refrence = _firestore.collection(productpath);
       final QuerySnapshot productSnapshot = await refrence.get();
@@ -32,8 +33,20 @@ class CloudDatabase {
         restoredProdcuts
             .add(ProductModel.fromMap(data! as Map<String, dynamic>));
       }
+
       return restoredProdcuts;
     } on Exception {
+      rethrow;
+    }
+  }
+
+  Future<void> deleteProduct({required String id}) async {
+    final String productpath = "Products/$id";
+    try {
+      final DocumentReference<Map<String, dynamic>> cloudRef =
+          _firestore.doc(productpath);
+      await cloudRef.delete();
+    } on FirebaseException {
       rethrow;
     }
   }

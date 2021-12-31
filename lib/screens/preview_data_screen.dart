@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:beauty_app/models/product_model.dart';
-import 'package:beauty_app/screens/products_screen.dart';
+import 'package:beauty_app/models/routes_class.dart';
 import 'package:beauty_app/services/firebase/cloud_database.dart';
 import 'package:beauty_app/widgets/exception_alert_dialog.dart';
 import 'package:carousel_slider/carousel_slider.dart';
@@ -48,6 +48,10 @@ class _PreviewScreenState extends State<PreviewScreen> {
                   );
                 }).toList(),
               ),
+              const SizedBox(height: 10),
+              _buildDataWidget(
+                  title: "Product Catergory", value: widget.product.category),
+              const SizedBox(height: 10),
               _buildDataWidget(
                   title: "Product Name", value: widget.product.name),
               const SizedBox(height: 10),
@@ -138,12 +142,8 @@ class _PreviewScreenState extends State<PreviewScreen> {
     try {
       if (FirebaseAuth.instance.currentUser != null) {
         cloudDatabase.uploadProductData(widget.product.toMap());
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-            builder: (BuildContext context) => const ProductsScreen(),
-          ),
-        );
+        Navigator.of(context)
+            .pushNamedAndRemoveUntil(Routes().allProducts, (route) => false);
       }
     } on FirebaseException catch (e) {
       showExceptionAlertDialog(context,

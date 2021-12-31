@@ -15,6 +15,10 @@ class FirebaseAuthentication {
     }
   }
 
+  Future<void> signOut() {
+    return _firebaseAuth.signOut();
+  }
+
   Future<User?> signInWithEmailAndPassword(
       {required String email, required String password}) async {
     try {
