@@ -15,6 +15,20 @@ class CloudDatabase {
       final DocumentReference<Map<String, dynamic>> cloudRef =
           _firestore.doc(productpath);
       await cloudRef.set(product);
+      await uploadCategoryProduct(product);
+    } on FirebaseException {
+      rethrow;
+    }
+  }
+
+  Future<void> uploadCategoryProduct(Map<String, dynamic> product) async {
+    final String productpath =
+        "Category/Products/${product["category"]}/${product["id"]}";
+
+    try {
+      final DocumentReference<Map<String, dynamic>> cloudRef =
+          _firestore.doc(productpath);
+      await cloudRef.set(product);
     } on FirebaseException {
       rethrow;
     }

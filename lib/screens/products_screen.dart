@@ -15,60 +15,65 @@ class ProductsScreen extends StatefulWidget {
 class _ProductsScreenState extends State<ProductsScreen> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('All Products'),
-        actions: [
-          IconButton(
-              onPressed: () {
-                setState(() {});
-              },
-              icon: const Icon(Icons.refresh)),
-          TextButton(
-            onPressed: () {
-              FirebaseAuth.instance.signOut();
-              Navigator.pushReplacementNamed(context, Routes().login);
-            },
-            child: const Text(
-              "Sign Out",
-              style: TextStyle(color: Colors.white),
-            ),
-          ),
-        ],
-      ),
-      floatingActionButton: FloatingActionButton(
-        child: const Icon(Icons.add),
-        onPressed: () {
-          if (FirebaseAuth.instance.currentUser != null) {
-            Navigator.pushNamed(context, Routes().addProduct);
-          }
-        },
-      ),
-      body: SingleChildScrollView(
-        child: FutureBuilder(
-          future: CloudDatabase().getProductsData(),
-          builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
-            if (!snapshot.hasData) {
-              return const Center(
-                child: Text("No Product Avaiable"),
-              );
-            }
-            if (snapshot.hasData) {
-              List<ProductModel> products = snapshot.data;
-              return ListView.builder(
-                shrinkWrap: true,
-                itemCount: products.length,
-                itemBuilder: (BuildContext context, int index) {
-                  return ProductContainer(product: products[index]);
+    return Title(
+      title: "Makdeck Products",
+      color: Colors.black,
+      child: Scaffold(
+        appBar: AppBar(
+          title: const Text('All Products'),
+          automaticallyImplyLeading: false,
+          actions: [
+            IconButton(
+                onPressed: () {
+                  setState(() {});
                 },
-              );
-            } else {
-              return const Align(
-                alignment: Alignment.center,
-                child: CircularProgressIndicator(),
-              );
+                icon: const Icon(Icons.refresh)),
+            TextButton(
+              onPressed: () {
+                FirebaseAuth.instance.signOut();
+                Navigator.pushReplacementNamed(context, Routes().login);
+              },
+              child: const Text(
+                "Sign Out",
+                style: TextStyle(color: Colors.white),
+              ),
+            ),
+          ],
+        ),
+        floatingActionButton: FloatingActionButton(
+          child: const Icon(Icons.add),
+          onPressed: () {
+            if (FirebaseAuth.instance.currentUser != null) {
+              Navigator.pushNamed(context, Routes().addProduct);
             }
           },
+        ),
+        body: SingleChildScrollView(
+          child: FutureBuilder(
+            future: CloudDatabase().getProductsData(),
+            builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
+              if (!snapshot.hasData) {
+                return const Center(
+                  child: Text("No Product Avaiable"),
+                );
+              }
+              if (snapshot.hasData) {
+                List<ProductModel> products = snapshot.data;
+                return ListView.builder(
+                  shrinkWrap: true,
+                  itemCount: products.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    return ProductContainer(product: products[index]);
+                  },
+                );
+              } else {
+                return const Align(
+                  alignment: Alignment.center,
+                  child: CircularProgressIndicator(),
+                );
+              }
+            },
+          ),
         ),
       ),
     );

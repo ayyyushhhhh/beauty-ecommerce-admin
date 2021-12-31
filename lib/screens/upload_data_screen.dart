@@ -51,7 +51,7 @@ class _UploadDataScreenState extends State<UploadDataScreen> {
   final List<String> _dropDownItems = [
     "Skincare",
     "Makeup",
-    "Anti-Ageing",
+    "Anti-Aging",
     "Skin Protection",
     "Hair Care",
     "Personal Care",
@@ -92,227 +92,231 @@ class _UploadDataScreenState extends State<UploadDataScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text("Upload Data"),
-        centerTitle: false,
-      ),
-      body: SingleChildScrollView(
-        child: Container(
-          padding: const EdgeInsets.all(20),
-          child: Column(
-            children: [
-              FileUploadArea(
-                imagePaths: _previewImages,
-                onCountChanged: (String? imageurl, int? index) {
-                  if (imageurl != null) {
-                    _images.add(imageurl);
-                  } else {
-                    _images.removeAt(index!);
-                  }
-                },
-              ),
-              const SizedBox(
-                height: 10,
-              ),
-              DropdownButton<String>(
-                  value: _productCatergory,
-                  items: _dropDownItems.map((String value) {
-                    return DropdownMenuItem<String>(
-                      value: value,
-                      child: Text(value),
-                    );
-                  }).toList(),
-                  onChanged: (value) {
-                    setState(() {
-                      if (value != null) {
-                        _productCatergory = value;
-                      }
-                    });
-                  }),
-              const Align(
-                alignment: Alignment.centerLeft,
-                child: Text(
-                  "Product Name",
-                  style: TextStyle(
-                    fontSize: 24,
-                    fontWeight: FontWeight.w800,
-                  ),
+    return Title(
+      title: "Upload Product",
+      color: Colors.black,
+      child: Scaffold(
+        appBar: AppBar(
+          title: const Text("Upload Data"),
+          centerTitle: false,
+        ),
+        body: SingleChildScrollView(
+          child: Container(
+            padding: const EdgeInsets.all(20),
+            child: Column(
+              children: [
+                FileUploadArea(
+                  imagePaths: _previewImages,
+                  onCountChanged: (String? imageurl, int? index) {
+                    if (imageurl != null) {
+                      _images.add(imageurl);
+                    } else {
+                      _images.removeAt(index!);
+                    }
+                  },
                 ),
-              ),
-              const SizedBox(height: 10),
-              _buildTextField(
-                  inputTextFieldType: _textFieldType.Name,
-                  height: 50,
-                  initialData: _name),
-              const SizedBox(height: 10),
-              const Align(
-                alignment: Alignment.centerLeft,
-                child: Text(
-                  "Product Description",
-                  style: TextStyle(
-                    fontSize: 24,
-                    fontWeight: FontWeight.w800,
-                  ),
+                const SizedBox(
+                  height: 10,
                 ),
-              ),
-              const SizedBox(height: 10),
-              _buildZefrkaTextField(
-                controller: _productDescriptionController,
-                height: 200,
-                focusNode: FocusNode(),
-              ),
-              const SizedBox(height: 10),
-              _buildAdditionalDetails(),
-              const SizedBox(
-                height: 10,
-              ),
-              const Align(
-                alignment: Alignment.centerLeft,
-                child: Text(
-                  "Features",
-                  style: TextStyle(
-                    fontSize: 24,
-                    fontWeight: FontWeight.w800,
-                  ),
-                ),
-              ),
-              const SizedBox(height: 10),
-              _buildZefrkaTextField(
-                controller: _featuresController,
-                focusNode: FocusNode(),
-                height: 200,
-              ),
-              const SizedBox(height: 10),
-              const Align(
-                alignment: Alignment.centerLeft,
-                child: Text(
-                  "Benefits",
-                  style: TextStyle(
-                    fontSize: 24,
-                    fontWeight: FontWeight.w800,
-                  ),
-                ),
-              ),
-              const SizedBox(height: 10),
-              _buildZefrkaTextField(
-                controller: _benefitsController,
-                focusNode: FocusNode(),
-                height: 200,
-              ),
-              const SizedBox(height: 10),
-              const Align(
-                alignment: Alignment.centerLeft,
-                child: Text(
-                  "Ingredients",
-                  style: TextStyle(
-                    fontSize: 24,
-                    fontWeight: FontWeight.w800,
-                  ),
-                ),
-              ),
-              const SizedBox(height: 10),
-              _buildZefrkaTextField(
-                controller: _ingredientsController,
-                focusNode: FocusNode(),
-                height: 200,
-              ),
-              const SizedBox(height: 10),
-              const Align(
-                alignment: Alignment.centerLeft,
-                child: Text(
-                  "Country of Origin",
-                  style: TextStyle(
-                    fontSize: 24,
-                    fontWeight: FontWeight.w800,
-                  ),
-                ),
-              ),
-              const SizedBox(height: 10),
-              _buildTextField(
-                  inputTextFieldType: _textFieldType.CountryOfOrigin,
-                  height: 50,
-                  initialData: _countryofOrigin),
-              const SizedBox(height: 10),
-              const Align(
-                alignment: Alignment.centerLeft,
-                child: Text(
-                  "Importer Name",
-                  style: TextStyle(
-                    fontSize: 24,
-                    fontWeight: FontWeight.w800,
-                  ),
-                ),
-              ),
-              const SizedBox(height: 10),
-              _buildTextField(
-                  inputTextFieldType: _textFieldType.NameOfImporter,
-                  height: 100,
-                  initialData: _nameOfImporter),
-              const SizedBox(height: 10),
-              const Align(
-                alignment: Alignment.centerLeft,
-                child: Text(
-                  "Address Importer",
-                  style: TextStyle(
-                    fontSize: 24,
-                    fontWeight: FontWeight.w800,
-                  ),
-                ),
-              ),
-              const SizedBox(height: 10),
-              _buildTextField(
-                  inputTextFieldType: _textFieldType.ImporterAddress,
-                  height: 100,
-                  initialData: _addressofImporter),
-              const SizedBox(height: 10),
-              ElevatedButton(
-                onPressed: () {
-                  _productDescription =
-                      jsonEncode(_productDescriptionController.document);
-                  _features = jsonEncode(_featuresController.document);
-                  _benefits = jsonEncode(_featuresController.document);
-                  _ingredients = jsonEncode(_ingredientsController.document);
-                  if (_addressofImporter != "" &&
-                      _images.isNotEmpty &&
-                      _ingredients != "" &&
-                      _benefits != "" &&
-                      _countryofOrigin != "" &&
-                      _features != "" &&
-                      _nameOfImporter != "" &&
-                      _name != "" &&
-                      _productDescription != "" &&
-                      _quantity != "" &&
-                      _mrp != "") {
-                    _sendPreview();
-                  } else {
-                    showAlertDialog(context,
-                        title: "Error",
-                        content: "Please fill all the fields",
-                        defaultActionText: "OK");
-                  }
-                },
-                child: Container(
-                  height: 70,
-                  width: double.infinity,
-                  decoration: const BoxDecoration(
-                    color: Colors.purple,
-                  ),
-                  child: const Align(
-                    alignment: Alignment.center,
-                    child: Text(
-                      "PREVIEW",
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 30,
-                        fontWeight: FontWeight.w800,
-                      ),
+                DropdownButton<String>(
+                    value: _productCatergory,
+                    items: _dropDownItems.map((String value) {
+                      return DropdownMenuItem<String>(
+                        value: value,
+                        child: Text(value),
+                      );
+                    }).toList(),
+                    onChanged: (value) {
+                      setState(() {
+                        if (value != null) {
+                          _productCatergory = value;
+                        }
+                      });
+                    }),
+                const Align(
+                  alignment: Alignment.centerLeft,
+                  child: Text(
+                    "Product Name",
+                    style: TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.w800,
                     ),
                   ),
                 ),
-              )
-            ],
+                const SizedBox(height: 10),
+                _buildTextField(
+                    inputTextFieldType: _textFieldType.Name,
+                    height: 50,
+                    initialData: _name),
+                const SizedBox(height: 10),
+                const Align(
+                  alignment: Alignment.centerLeft,
+                  child: Text(
+                    "Product Description",
+                    style: TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.w800,
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 10),
+                _buildZefrkaTextField(
+                  controller: _productDescriptionController,
+                  height: 200,
+                  focusNode: FocusNode(),
+                ),
+                const SizedBox(height: 10),
+                _buildAdditionalDetails(),
+                const SizedBox(
+                  height: 10,
+                ),
+                const Align(
+                  alignment: Alignment.centerLeft,
+                  child: Text(
+                    "Features",
+                    style: TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.w800,
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 10),
+                _buildZefrkaTextField(
+                  controller: _featuresController,
+                  focusNode: FocusNode(),
+                  height: 200,
+                ),
+                const SizedBox(height: 10),
+                const Align(
+                  alignment: Alignment.centerLeft,
+                  child: Text(
+                    "Benefits",
+                    style: TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.w800,
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 10),
+                _buildZefrkaTextField(
+                  controller: _benefitsController,
+                  focusNode: FocusNode(),
+                  height: 200,
+                ),
+                const SizedBox(height: 10),
+                const Align(
+                  alignment: Alignment.centerLeft,
+                  child: Text(
+                    "Ingredients",
+                    style: TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.w800,
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 10),
+                _buildZefrkaTextField(
+                  controller: _ingredientsController,
+                  focusNode: FocusNode(),
+                  height: 200,
+                ),
+                const SizedBox(height: 10),
+                const Align(
+                  alignment: Alignment.centerLeft,
+                  child: Text(
+                    "Country of Origin",
+                    style: TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.w800,
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 10),
+                _buildTextField(
+                    inputTextFieldType: _textFieldType.CountryOfOrigin,
+                    height: 50,
+                    initialData: _countryofOrigin),
+                const SizedBox(height: 10),
+                const Align(
+                  alignment: Alignment.centerLeft,
+                  child: Text(
+                    "Importer Name",
+                    style: TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.w800,
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 10),
+                _buildTextField(
+                    inputTextFieldType: _textFieldType.NameOfImporter,
+                    height: 100,
+                    initialData: _nameOfImporter),
+                const SizedBox(height: 10),
+                const Align(
+                  alignment: Alignment.centerLeft,
+                  child: Text(
+                    "Address Importer",
+                    style: TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.w800,
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 10),
+                _buildTextField(
+                    inputTextFieldType: _textFieldType.ImporterAddress,
+                    height: 100,
+                    initialData: _addressofImporter),
+                const SizedBox(height: 10),
+                ElevatedButton(
+                  onPressed: () {
+                    _productDescription =
+                        jsonEncode(_productDescriptionController.document);
+                    _features = jsonEncode(_featuresController.document);
+                    _benefits = jsonEncode(_featuresController.document);
+                    _ingredients = jsonEncode(_ingredientsController.document);
+                    if (_addressofImporter != "" &&
+                        _images.isNotEmpty &&
+                        _ingredients != "" &&
+                        _benefits != "" &&
+                        _countryofOrigin != "" &&
+                        _features != "" &&
+                        _nameOfImporter != "" &&
+                        _name != "" &&
+                        _productDescription != "" &&
+                        _quantity != "" &&
+                        _mrp != "") {
+                      _sendPreview();
+                    } else {
+                      showAlertDialog(context,
+                          title: "Error",
+                          content: "Please fill all the fields",
+                          defaultActionText: "OK");
+                    }
+                  },
+                  child: Container(
+                    height: 70,
+                    width: double.infinity,
+                    decoration: const BoxDecoration(
+                      color: Colors.purple,
+                    ),
+                    child: const Align(
+                      alignment: Alignment.center,
+                      child: Text(
+                        "PREVIEW",
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 30,
+                          fontWeight: FontWeight.w800,
+                        ),
+                      ),
+                    ),
+                  ),
+                )
+              ],
+            ),
           ),
         ),
       ),

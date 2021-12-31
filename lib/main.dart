@@ -27,7 +27,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-        title: 'Beauty App',
+        title: 'Makdeck Admin',
         theme: ThemeData(
           primarySwatch: Colors.purple,
         ),
