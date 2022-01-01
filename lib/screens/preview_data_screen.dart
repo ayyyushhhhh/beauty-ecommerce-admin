@@ -56,6 +56,10 @@ class _PreviewScreenState extends State<PreviewScreen> {
                   title: "Product Name", value: widget.product.name),
               const SizedBox(height: 10),
               _buildDataWidget(
+                  title: "Original Price",
+                  value: "₹ " + widget.product.originalPrice),
+              const SizedBox(height: 10),
+              _buildDataWidget(
                   title: "Price", value: "₹ " + widget.product.mrp),
               const SizedBox(height: 10),
               _buildDataWidget(

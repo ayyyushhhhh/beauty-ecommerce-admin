@@ -54,8 +54,22 @@ class CloudDatabase {
     }
   }
 
-  Future<void> deleteProduct({required String id}) async {
+  Future<void> deleteProduct(
+      {required String id, required String category}) async {
     final String productpath = "Products/$id";
+    try {
+      final DocumentReference<Map<String, dynamic>> cloudRef =
+          _firestore.doc(productpath);
+      await cloudRef.delete();
+      await deleteCategoryProduct(id: id, category: category);
+    } on FirebaseException {
+      rethrow;
+    }
+  }
+
+  Future<void> deleteCategoryProduct(
+      {required String id, required String category}) async {
+    final String productpath = "Category/Products/$category/$id";
     try {
       final DocumentReference<Map<String, dynamic>> cloudRef =
           _firestore.doc(productpath);
