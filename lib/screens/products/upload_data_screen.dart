@@ -3,9 +3,9 @@
 import 'dart:convert';
 import 'dart:math';
 import 'package:beauty_app/models/product_model.dart';
-import 'package:beauty_app/screens/preview_data_screen.dart';
+import 'package:beauty_app/screens/products/preview_data_screen.dart';
 import 'package:beauty_app/widgets/error_widget.dart';
-import 'package:beauty_app/widgets/file_upload_button.dart';
+import 'package:beauty_app/widgets/file_upload_area.dart';
 import 'package:flutter/material.dart';
 import 'package:zefyrka/zefyrka.dart';
 

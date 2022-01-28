@@ -78,4 +78,44 @@ class CloudDatabase {
       rethrow;
     }
   }
+
+  Future<void> uploadBanner(
+      {required String banner, required List<String> bannerimages}) async {
+    final String bannerpath = "Banners/$banner";
+    final bannerMap = {
+      "banner": banner,
+      "bannerUrl": bannerimages,
+    };
+    try {
+      final DocumentReference<Map<String, dynamic>> cloudRef =
+          _firestore.doc(bannerpath);
+      await cloudRef.set(bannerMap);
+    } on FirebaseException {
+      rethrow;
+    }
+  }
+
+  Future<List> getBanners(
+      {required String banner, required List<String> bannerimages}) async {
+    const String bannerpath = "Banners/";
+
+    try {
+      final CollectionReference refrence = _firestore.collection(bannerpath);
+      final QuerySnapshot productSnapshot = await refrence.get();
+      final restoredBanners = [];
+      final allData = productSnapshot.docs.map((doc) => doc.data()).toList();
+
+      for (final data in allData) {
+        final bannerMapdata = data as Map<String, dynamic>;
+        restoredBanners.add({
+          "banner": bannerMapdata["banner"],
+          "bannerUrl": bannerMapdata["bannerUrl"],
+        });
+      }
+
+      return restoredBanners;
+    } on Exception {
+      rethrow;
+    }
+  }
 }

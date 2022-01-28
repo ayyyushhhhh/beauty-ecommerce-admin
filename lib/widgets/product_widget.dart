@@ -1,8 +1,8 @@
 // ignore_for_file: avoid_unnecessary_containers
 
 import 'package:beauty_app/models/product_model.dart';
-import 'package:beauty_app/screens/preview_data_screen.dart';
-import 'package:beauty_app/screens/upload_data_screen.dart';
+import 'package:beauty_app/screens/products/preview_data_screen.dart';
+import 'package:beauty_app/screens/products/upload_data_screen.dart';
 import 'package:beauty_app/services/firebase/cloud_database.dart';
 import 'package:flutter/material.dart';
 
