@@ -43,17 +43,14 @@ class ProductContainer extends StatelessWidget {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
-                      Text("Product Category: " + product.category.toString()),
-                      const SizedBox(width: 10),
-                      Text("Product id: " + product.id.toString()),
+                      Text(product.id.toString()),
                       const SizedBox(width: 10),
                       Align(
                         alignment: Alignment.centerRight,
                         child: IconButton(
                           icon: const Icon(Icons.delete),
                           onPressed: () {
-                            CloudDatabase().deleteProduct(
-                                id: product.id, category: product.category);
+                            CloudDatabase().deleteProduct(id: product.id);
                           },
                         ),
                       ),
