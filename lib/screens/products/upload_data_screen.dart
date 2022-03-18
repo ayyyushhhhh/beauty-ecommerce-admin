@@ -274,7 +274,7 @@ class _UploadDataScreenState extends State<UploadDataScreen> {
                     _productDescription =
                         jsonEncode(_productDescriptionController.document);
                     _features = jsonEncode(_featuresController.document);
-                    _benefits = jsonEncode(_featuresController.document);
+                    _benefits = jsonEncode(_benefitsController.document);
                     _ingredients = jsonEncode(_ingredientsController.document);
                     if (_addressofImporter != "" &&
                         _images.isNotEmpty &&

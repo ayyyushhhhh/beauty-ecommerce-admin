@@ -60,6 +60,7 @@ class CloudDatabase {
       final DocumentReference<Map<String, dynamic>> cloudRef =
           _firestore.doc(productpath);
       await cloudRef.delete();
+<<<<<<< HEAD
     } on FirebaseException {
       rethrow;
     }
@@ -76,6 +77,8 @@ class CloudDatabase {
       final DocumentReference<Map<String, dynamic>> cloudRef =
           _firestore.doc(bannerpath);
       await cloudRef.set(bannerMap);
+=======
+>>>>>>> parent of 17e3179 (orginal price added)
     } on FirebaseException {
       rethrow;
     }
