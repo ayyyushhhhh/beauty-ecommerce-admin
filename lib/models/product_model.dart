@@ -14,6 +14,7 @@ class ProductModel {
   late String addressofImporter;
   late String id;
   late String category;
+  late String originalPrice;
   ProductModel({
     required this.id,
     required this.images,
@@ -30,6 +31,7 @@ class ProductModel {
     required this.nameOfImporter,
     required this.addressofImporter,
     required this.category,
+    required this.originalPrice,
   });
 
   Map<String, dynamic> toMap() {
@@ -49,6 +51,7 @@ class ProductModel {
       'nameOfImporter': nameOfImporter,
       'addressofImporter': addressofImporter,
       'category': category,
+      "originalPrice": originalPrice,
     };
   }
 
@@ -68,5 +71,6 @@ class ProductModel {
     addressofImporter = map['addressofImporter'];
     id = map['id'];
     category = map['category'] ?? "Skincare";
+    originalPrice = map["originalPrice"];
   }
 }

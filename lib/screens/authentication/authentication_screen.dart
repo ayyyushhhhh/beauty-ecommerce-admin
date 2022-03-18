@@ -89,7 +89,6 @@ class _AuthenticationScreenState extends State<AuthenticationScreen> {
                             email: _email.toString(),
                             password: _password.toString());
                     if (user != null) {
-                      print(user.uid);
                       Navigator.popAndPushNamed(context, Routes().allProducts);
                       // Navigator.pushReplacementNamed(
                       //   context,

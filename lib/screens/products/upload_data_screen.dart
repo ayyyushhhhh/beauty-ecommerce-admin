@@ -3,9 +3,11 @@
 import 'dart:convert';
 import 'dart:math';
 import 'package:beauty_app/models/product_model.dart';
+
 import 'package:beauty_app/screens/products/preview_data_screen.dart';
 import 'package:beauty_app/widgets/error_widget.dart';
 import 'package:beauty_app/widgets/file_upload_area.dart';
+
 import 'package:flutter/material.dart';
 import 'package:zefyrka/zefyrka.dart';
 
@@ -16,6 +18,7 @@ enum _textFieldType {
   CountryOfOrigin,
   NameOfImporter,
   ImporterAddress,
+  OriginalPrice,
 }
 
 class UploadDataScreen extends StatefulWidget {
@@ -41,6 +44,7 @@ class _UploadDataScreenState extends State<UploadDataScreen> {
   late String _countryofOrigin = "";
   late String _nameOfImporter = "";
   late String _addressofImporter = "";
+  String _originalPrice = "";
   late String id;
   ZefyrController _productDescriptionController = ZefyrController();
   ZefyrController _featuresController = ZefyrController();
@@ -87,6 +91,7 @@ class _UploadDataScreenState extends State<UploadDataScreen> {
       _previewImages = widget.product!.images;
       _images = widget.product!.images;
       _productCatergory = widget.product!.category;
+      _originalPrice = widget.product!.originalPrice;
     }
   }
 
@@ -340,6 +345,7 @@ class _UploadDataScreenState extends State<UploadDataScreen> {
       nameOfImporter: _nameOfImporter,
       addressofImporter: _addressofImporter,
       category: _productCatergory,
+      originalPrice: _originalPrice,
     );
     Navigator.push(
       context,
@@ -381,6 +387,8 @@ class _UploadDataScreenState extends State<UploadDataScreen> {
             _countryofOrigin = value;
           } else if (inputTextFieldType == _textFieldType.ImporterAddress) {
             _addressofImporter = value;
+          } else if (inputTextFieldType == _textFieldType.OriginalPrice) {
+            _originalPrice = value;
           }
         },
         decoration: InputDecoration(
@@ -442,7 +450,7 @@ class _UploadDataScreenState extends State<UploadDataScreen> {
   Widget _buildAdditionalDetails() {
     return LayoutBuilder(
       builder: (BuildContext context, BoxConstraints constraints) {
-        if (constraints.maxWidth > 800) {
+        if (constraints.maxWidth > 1200) {
           return Row(
             children: [
               Row(
@@ -461,6 +469,26 @@ class _UploadDataScreenState extends State<UploadDataScreen> {
                           height: 40,
                           inputTextFieldType: _textFieldType.MRP,
                           initialData: _mrp)),
+                  const SizedBox(width: 10),
+                ],
+              ),
+              Row(
+                children: [
+                  const Text(
+                    "Original MRP : ₹",
+                    style: TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.w800,
+                    ),
+                  ),
+                  const SizedBox(width: 10),
+                  SizedBox(
+                      width: 100,
+                      child: _buildTextField(
+                        height: 40,
+                        inputTextFieldType: _textFieldType.OriginalPrice,
+                        initialData: _originalPrice,
+                      )),
                   const SizedBox(width: 10),
                 ],
               ),
@@ -546,6 +574,29 @@ class _UploadDataScreenState extends State<UploadDataScreen> {
                           inputTextFieldType: _textFieldType.MRP,
                           initialData: _mrp)),
                   const SizedBox(width: 10),
+                ],
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              Row(
+                children: [
+                  const Text(
+                    "Original MRP : ",
+                    style: TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.w800,
+                    ),
+                  ),
+                  const SizedBox(width: 10),
+                  SizedBox(
+                    width: 100,
+                    child: _buildTextField(
+                      height: 40,
+                      inputTextFieldType: _textFieldType.OriginalPrice,
+                      initialData: _originalPrice,
+                    ),
+                  ),
                 ],
               ),
               const SizedBox(

@@ -10,7 +10,7 @@ class CloudStorage {
       await storageReference.putData(
           imageBytes, SettableMetadata(contentType: 'image/png'));
       final String url = await storageReference.getDownloadURL();
-      print(url);
+
       return url;
     } on FirebaseException {
       rethrow;
