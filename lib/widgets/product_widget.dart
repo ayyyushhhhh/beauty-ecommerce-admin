@@ -45,9 +45,9 @@ class ProductContainer extends StatelessWidget {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
-                      Text("Product Category: " + product.category.toString()),
+                      Text("Product Category: ${product.category}"),
                       const SizedBox(width: 10),
-                      Text("Product id: " + product.id.toString()),
+                      Text("Product id: ${product.id}"),
                       const SizedBox(width: 10),
                       Align(
                         alignment: Alignment.centerRight,

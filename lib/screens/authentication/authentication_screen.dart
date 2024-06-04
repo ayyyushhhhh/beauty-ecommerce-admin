@@ -3,11 +3,13 @@ import 'package:beauty_app/services/firebase/firebase_auth.dart';
 import 'package:beauty_app/widgets/exception_alert_dialog.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:simple_fontellico_progress_dialog/simple_fontico_loading.dart';
 
 class AuthenticationScreen extends StatefulWidget {
   const AuthenticationScreen({Key? key}) : super(key: key);
 
   @override
+  // ignore: library_private_types_in_public_api
   _AuthenticationScreenState createState() => _AuthenticationScreenState();
 }
 
@@ -84,11 +86,20 @@ class _AuthenticationScreenState extends State<AuthenticationScreen> {
               onPressed: () async {
                 if (_email != null && _password != null) {
                   try {
+                    SimpleFontelicoProgressDialog dialog =
+                        SimpleFontelicoProgressDialog(
+                            context: context, barrierDimisable: true);
+                    dialog.show(
+                      message: "Signing In",
+                    );
+
                     User? user = await FirebaseAuthentication()
                         .signInWithEmailAndPassword(
                             email: _email.toString(),
                             password: _password.toString());
                     if (user != null) {
+                      dialog.hide();
+                      // ignore: use_build_context_synchronously
                       Navigator.popAndPushNamed(context, Routes().allProducts);
                       // Navigator.pushReplacementNamed(
                       //   context,
@@ -96,6 +107,7 @@ class _AuthenticationScreenState extends State<AuthenticationScreen> {
                       // );
                     }
                   } on FirebaseException catch (e) {
+                    // ignore: use_build_context_synchronously
                     showExceptionAlertDialog(context,
                         exception: e, title: "Login Failed");
                   }

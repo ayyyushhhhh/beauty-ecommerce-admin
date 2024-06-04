@@ -9,6 +9,7 @@ class ProductsScreen extends StatefulWidget {
   const ProductsScreen({Key? key}) : super(key: key);
 
   @override
+  // ignore: library_private_types_in_public_api
   _ProductsScreenState createState() => _ProductsScreenState();
 }
 
@@ -35,7 +36,7 @@ class _ProductsScreenState extends State<ProductsScreen> {
               },
               child: const Text(
                 "Sign Out",
-                style: TextStyle(color: Colors.white),
+                style: TextStyle(color: Colors.black),
               ),
             ),
           ],

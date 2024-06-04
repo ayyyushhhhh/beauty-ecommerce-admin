@@ -15,6 +15,7 @@ class PreviewScreen extends StatefulWidget {
   const PreviewScreen({Key? key, required this.product}) : super(key: key);
 
   @override
+  // ignore: library_private_types_in_public_api
   _PreviewScreenState createState() => _PreviewScreenState();
 }
 
@@ -57,10 +58,10 @@ class _PreviewScreenState extends State<PreviewScreen> {
               const SizedBox(height: 10),
               _buildDataWidget(
                   title: "Original Price",
-                  value: "₹ " + widget.product.originalPrice),
+                  value: "₹ ${widget.product.originalPrice}"),
               const SizedBox(height: 10),
               _buildDataWidget(
-                  title: "Price", value: "₹ " + widget.product.mrp),
+                  title: "Price", value: "₹ ${widget.product.mrp}"),
               const SizedBox(height: 10),
               _buildDataWidget(
                   title: "Quantity", value: widget.product.quantity),

@@ -16,6 +16,7 @@ class FileUploadArea extends StatefulWidget {
       : super(key: key);
 
   @override
+  // ignore: library_private_types_in_public_api
   _FileUploadAreaState createState() => _FileUploadAreaState();
 }
 
@@ -50,6 +51,7 @@ class _FileUploadAreaState extends State<FileUploadArea> {
           _isLoading = false;
         });
     } on FirebaseException catch (e) {
+      // ignore: use_build_context_synchronously
       showExceptionAlertDialog(context,
           title: "File Upload Error", exception: e);
     }

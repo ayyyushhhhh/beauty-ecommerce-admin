@@ -11,7 +11,7 @@ import 'package:beauty_app/widgets/file_upload_area.dart';
 import 'package:flutter/material.dart';
 import 'package:zefyrka/zefyrka.dart';
 
-enum _textFieldType {
+enum TextFieldtype {
   Name,
   MRP,
   Quantity,
@@ -26,6 +26,7 @@ class UploadDataScreen extends StatefulWidget {
   const UploadDataScreen({Key? key, this.product}) : super(key: key);
 
   @override
+  // ignore: library_private_types_in_public_api
   _UploadDataScreenState createState() => _UploadDataScreenState();
 }
 
@@ -150,7 +151,7 @@ class _UploadDataScreenState extends State<UploadDataScreen> {
                 ),
                 const SizedBox(height: 10),
                 _buildTextField(
-                    inputTextFieldType: _textFieldType.Name,
+                    inputTextFieldType: TextFieldtype.Name,
                     height: 50,
                     initialData: _name),
                 const SizedBox(height: 10),
@@ -238,7 +239,7 @@ class _UploadDataScreenState extends State<UploadDataScreen> {
                 ),
                 const SizedBox(height: 10),
                 _buildTextField(
-                    inputTextFieldType: _textFieldType.CountryOfOrigin,
+                    inputTextFieldType: TextFieldtype.CountryOfOrigin,
                     height: 50,
                     initialData: _countryofOrigin),
                 const SizedBox(height: 10),
@@ -254,7 +255,7 @@ class _UploadDataScreenState extends State<UploadDataScreen> {
                 ),
                 const SizedBox(height: 10),
                 _buildTextField(
-                    inputTextFieldType: _textFieldType.NameOfImporter,
+                    inputTextFieldType: TextFieldtype.NameOfImporter,
                     height: 100,
                     initialData: _nameOfImporter),
                 const SizedBox(height: 10),
@@ -270,7 +271,7 @@ class _UploadDataScreenState extends State<UploadDataScreen> {
                 ),
                 const SizedBox(height: 10),
                 _buildTextField(
-                    inputTextFieldType: _textFieldType.ImporterAddress,
+                    inputTextFieldType: TextFieldtype.ImporterAddress,
                     height: 100,
                     initialData: _addressofImporter),
                 const SizedBox(height: 10),
@@ -359,7 +360,7 @@ class _UploadDataScreenState extends State<UploadDataScreen> {
 
   Widget _buildTextField({
     required double height,
-    required _textFieldType inputTextFieldType,
+    required TextFieldtype inputTextFieldType,
     required String initialData,
   }) {
     return SizedBox(
@@ -375,19 +376,19 @@ class _UploadDataScreenState extends State<UploadDataScreen> {
         minLines: null,
         maxLines: null,
         onChanged: (value) {
-          if (inputTextFieldType == _textFieldType.Name) {
+          if (inputTextFieldType == TextFieldtype.Name) {
             _name = value;
-          } else if (inputTextFieldType == _textFieldType.MRP) {
+          } else if (inputTextFieldType == TextFieldtype.MRP) {
             _mrp = value;
-          } else if (inputTextFieldType == _textFieldType.Quantity) {
+          } else if (inputTextFieldType == TextFieldtype.Quantity) {
             _quantity = value;
-          } else if (inputTextFieldType == _textFieldType.NameOfImporter) {
+          } else if (inputTextFieldType == TextFieldtype.NameOfImporter) {
             _nameOfImporter = value;
-          } else if (inputTextFieldType == _textFieldType.CountryOfOrigin) {
+          } else if (inputTextFieldType == TextFieldtype.CountryOfOrigin) {
             _countryofOrigin = value;
-          } else if (inputTextFieldType == _textFieldType.ImporterAddress) {
+          } else if (inputTextFieldType == TextFieldtype.ImporterAddress) {
             _addressofImporter = value;
-          } else if (inputTextFieldType == _textFieldType.OriginalPrice) {
+          } else if (inputTextFieldType == TextFieldtype.OriginalPrice) {
             _originalPrice = value;
           }
         },
@@ -467,7 +468,7 @@ class _UploadDataScreenState extends State<UploadDataScreen> {
                       width: 100,
                       child: _buildTextField(
                           height: 40,
-                          inputTextFieldType: _textFieldType.MRP,
+                          inputTextFieldType: TextFieldtype.MRP,
                           initialData: _mrp)),
                   const SizedBox(width: 10),
                 ],
@@ -486,7 +487,7 @@ class _UploadDataScreenState extends State<UploadDataScreen> {
                       width: 100,
                       child: _buildTextField(
                         height: 40,
-                        inputTextFieldType: _textFieldType.OriginalPrice,
+                        inputTextFieldType: TextFieldtype.OriginalPrice,
                         initialData: _originalPrice,
                       )),
                   const SizedBox(width: 10),
@@ -506,7 +507,7 @@ class _UploadDataScreenState extends State<UploadDataScreen> {
                       width: 100,
                       child: _buildTextField(
                           height: 40,
-                          inputTextFieldType: _textFieldType.Quantity,
+                          inputTextFieldType: TextFieldtype.Quantity,
                           initialData: _quantity)),
                 ],
               ),
@@ -571,7 +572,7 @@ class _UploadDataScreenState extends State<UploadDataScreen> {
                       width: 100,
                       child: _buildTextField(
                           height: 40,
-                          inputTextFieldType: _textFieldType.MRP,
+                          inputTextFieldType: TextFieldtype.MRP,
                           initialData: _mrp)),
                   const SizedBox(width: 10),
                 ],
@@ -593,7 +594,7 @@ class _UploadDataScreenState extends State<UploadDataScreen> {
                     width: 100,
                     child: _buildTextField(
                       height: 40,
-                      inputTextFieldType: _textFieldType.OriginalPrice,
+                      inputTextFieldType: TextFieldtype.OriginalPrice,
                       initialData: _originalPrice,
                     ),
                   ),
@@ -616,7 +617,7 @@ class _UploadDataScreenState extends State<UploadDataScreen> {
                       width: 100,
                       child: _buildTextField(
                           height: 40,
-                          inputTextFieldType: _textFieldType.Quantity,
+                          inputTextFieldType: TextFieldtype.Quantity,
                           initialData: _quantity)),
                 ],
               ),
